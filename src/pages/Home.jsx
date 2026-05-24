@@ -31,7 +31,9 @@ export default function Home({ apps }) {
 
             const matchesKeys =
                 selectedKeys.length === 0 ||
-                selectedKeys.every((key) => shortcut.keys.includes(key))
+                selectedKeys.every((key) =>
+                    shortcut.keys.map(normalizeKey).includes(normalizeKey(key))
+                )
 
             const matchesSearch =
                 queryWords.length === 0 ||
@@ -57,7 +59,6 @@ export default function Home({ apps }) {
     }
 
     const keyboardKeys = hoveredShortcut?.keys || selectedKeys
-
     return (
         <main className="h-screen overflow-hidden bg-(--bg)">
             <Navbar />
@@ -335,6 +336,9 @@ function getSearchText(shortcut) {
 }
 
 function formatKey(key) {
+    return normalizeKey(key)
+}
+function normalizeKey(key) {
     const labels = {
         CmdLeft : "Cmd" ,
         CmdRight : "Cmd" ,

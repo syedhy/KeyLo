@@ -160,9 +160,9 @@ export default function HeroKeyboard({ activeKeys = [], onKeyClick }) {
 function KeyboardKey({ item, activeKeys, onKeyClick }) {
     const keyId = item.id || item.label
 
-    const isActive =
-        activeKeys.includes(keyId) ||
-        activeKeys.includes(item.label)
+const isActive =
+    activeKeys.includes(keyId) ||
+    activeKeys.includes(item.label)
 
     return (
         <button
