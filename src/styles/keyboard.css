@@ -1,0 +1,245 @@
+.keyboard-shell {
+    --keyboard-bg:
+        linear-gradient(
+            145deg ,
+            #1d2128 0% ,
+            #16191f 42% ,
+            #0f1116 100%
+        );
+
+    --keyboard-border: rgba(255 , 255 , 255 , 0.06);
+
+    --keyboard-shadow:
+        0 45px 100px rgba(0 , 0 , 0 , 0.55) ,
+        0 12px 32px rgba(0 , 0 , 0 , 0.30) ,
+        inset 0 1px 0 rgba(255 , 255 , 255 , 0.04);
+
+    --keyboard-light:
+        radial-gradient(
+            circle at top left ,
+            rgba(255 , 255 , 255 , 0.05) ,
+            transparent 30%
+        ) ,
+        radial-gradient(
+            circle at bottom right ,
+            rgba(148 , 163 , 184 , 0.06) ,
+            transparent 34%
+        );
+
+    --key-border: #343943;
+
+    --key-bg:
+        linear-gradient(
+            180deg ,
+            #343943 0% ,
+            #242933 48% ,
+            #171b22 100%
+        );
+
+    --key-text: #f1f5f9;
+    --key-subtext: #9ca3af;
+
+    --key-highlight: rgba(255 , 255 , 255 , 0.08);
+
+    --key-shadow:
+        0 5px 0 #08090c ,
+        0 12px 20px rgba(0 , 0 , 0 , 0.45) ,
+        inset 0 1px 0 rgba(255 , 255 , 255 , 0.10) ,
+        inset 0 -5px 0 rgba(0 , 0 , 0 , 0.40);
+
+    --key-hover-border: rgba(255 , 255 , 255 , 0.18);
+
+    --key-hover-bg:
+        linear-gradient(
+            180deg ,
+            #414754 0% ,
+            #2b313c 46% ,
+            #1b2028 100%
+        );
+
+    --key-hover-highlight: rgba(255 , 255 , 255 , 0.14);
+
+    --key-hover-shadow:
+        0 0 16px rgba(255 , 255 , 255 , 0.05) ,
+        0 0 34px rgba(148 , 163 , 184 , 0.10) ,
+        0 5px 0 #0a0c10 ,
+        0 14px 22px rgba(0 , 0 , 0 , 0.46) ,
+        inset 0 1px 0 rgba(255 , 255 , 255 , 0.12) ,
+        inset 0 -5px 0 rgba(0 , 0 , 0 , 0.38);
+
+    --key-active-border: #e5e7eb;
+
+    --key-active-bg:
+        linear-gradient(
+            180deg ,
+            #ffffff 0% ,
+            #dbe4ef 42% ,
+            #94a3b8 100%
+        );
+
+    --key-active-text: #111827;
+    --key-active-subtext: #4b5563;
+
+    --key-active-highlight: rgba(255 , 255 , 255 , 0.62);
+
+    --key-active-shadow:
+        0 0 20px rgba(255 , 255 , 255 , 0.12) ,
+        0 0 42px rgba(148 , 163 , 184 , 0.16) ,
+        inset 0 1px 0 rgba(255 , 255 , 255 , 0.90) ,
+        inset 0 3px 8px rgba(255 , 255 , 255 , 0.22);
+}
+
+.keyboard-shell {
+    position: relative;
+    overflow: hidden;
+    border-radius: 2rem;
+    border: 1px solid var(--keyboard-border);
+    background: var(--keyboard-bg);
+    padding: 1.25rem;
+    box-shadow: var(--keyboard-shadow);
+    backdrop-filter: blur(24px);
+}
+
+.keyboard-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 2rem;
+    background: var(--keyboard-light);
+    pointer-events: none;
+}
+
+.keyboard-content {
+    position: relative;
+    z-index: 10;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.keyboard-key {
+    position: relative;
+    flex-shrink: 0;
+    overflow: visible;
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    transition:
+        transform 150ms ease ,
+        filter 200ms ease;
+}
+
+.keyboard-key:hover {
+    transform: translateY(1px);
+    filter: brightness(1.04);
+}
+
+.keyboard-key.is-active {
+    transform: translateY(1px);
+}
+
+.keyboard-key-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 9px;
+    border: 1px solid var(--key-border);
+    background: var(--key-bg);
+    box-shadow: var(--key-shadow);
+    transition:
+        background 200ms ease ,
+        border-color 200ms ease ,
+        box-shadow 200ms ease ,
+        transform 150ms ease;
+}
+
+.keyboard-key:hover .keyboard-key-face {
+    border-color: var(--key-hover-border);
+    background: var(--key-hover-bg);
+    box-shadow: var(--key-hover-shadow);
+}
+
+.keyboard-key.is-active .keyboard-key-face {
+    transform: translateY(1px);
+    border-color: var(--key-active-border);
+    background: var(--key-active-bg);
+    box-shadow: var(--key-active-shadow);
+}
+
+.keyboard-key-shine {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    top: 4px;
+    height: 38%;
+    border-radius: 6px;
+    background: var(--key-highlight);
+    transition:
+        background 200ms ease ,
+        transform 150ms ease;
+}
+
+.keyboard-key:hover .keyboard-key-shine {
+    background: var(--key-hover-highlight);
+}
+
+.keyboard-key.is-active .keyboard-key-shine {
+    transform: translateY(1px);
+    background: var(--key-active-highlight);
+}
+
+.keyboard-key-label-wrap {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    padding-inline: 8px;
+    line-height: 1;
+    transition: transform 150ms ease;
+}
+
+.keyboard-key.is-active .keyboard-key-label-wrap {
+    transform: translateY(1px);
+}
+
+.keyboard-key-sub {
+    margin-bottom: 4px;
+    font-size: 7px;
+    color: var(--key-subtext);
+    opacity: 0.75;
+    font-weight: 500;
+}
+
+.keyboard-key.is-active .keyboard-key-sub {
+    color: var(--key-active-subtext);
+}
+
+.keyboard-key-label {
+    color: var(--key-text);
+    font-weight: 500;
+}
+
+.keyboard-key.is-active .keyboard-key-label {
+    color: var(--key-active-text);
+}
+
+.keyboard-key-small {
+    text-align: left;
+    font-size: 8px;
+}
+
+.keyboard-key-normal {
+    text-align: center;
+    font-size: 12px;
+}
+
+.keyboard-key-arrow {
+    text-align: center;
+    font-size: 11px;
+}

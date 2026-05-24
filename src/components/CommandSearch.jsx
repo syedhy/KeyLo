@@ -33,29 +33,8 @@ export default function CommandSearch({ shortcuts , onSelect }) {
         }
 
         return shortcuts
-            .filter((shortcut) => {
-                const searchableText = getSearchText(shortcut)
-
-                const keyWords = ["cmd", "shift", "ctrl", "control", "option", "alt"]
-
-                const shortcutWords = formatShortcut(shortcut.keys)
-                    .toLowerCase()
-                    .replaceAll("command", "cmd")
-                    .replaceAll("control", "ctrl")
-                    .replaceAll("option", "alt")
-                    .replaceAll("+", " ")
-                    .split(" ")
-                    .filter(Boolean)
-
-                return queryWords.every((word) => {
-                    if (keyWords.includes(word) || word.length === 1) {
-                        return shortcutWords.includes(word)
-                    }
-
-                    return searchableText.includes(word)
-                })
-            })
-            .slice(0, 10)
+            .filter((shortcut) => matchesShortcutSearch(shortcut , queryWords))
+            .slice(0 , 10)
     } , [query , shortcuts])
 
     if (!open) return null
@@ -63,7 +42,7 @@ export default function CommandSearch({ shortcuts , onSelect }) {
     return (
         <div
             onClick={() => setOpen(false)}
-            className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 px-4 pt-24 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-start justify-center bg-black/55 px-4 pt-24 backdrop-blur-xl"
         >
             <div
                 onClick={(e) => e.stopPropagation()}
@@ -73,7 +52,7 @@ export default function CommandSearch({ shortcuts , onSelect }) {
                     autoFocus
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search cmd p , vs code cmd shift p..."
+                    placeholder="Search cmd p , new f , vs code cmd shift e..."
                     className="w-full border-b border-[var(--border)] bg-transparent px-6 py-5 text-lg text-[var(--text)] outline-none placeholder:text-[var(--muted)]"
                 />
 
@@ -86,7 +65,7 @@ export default function CommandSearch({ shortcuts , onSelect }) {
                                 setOpen(false)
                                 setQuery("")
                             }}
-                            className="w-full rounded-2xl p-4 text-left transition-colors hover:bg-[var(--bg)]"
+                            className="w-full rounded-2xl p-4 text-left transition-colors hover:bg-[var(--surface-soft)]"
                         >
                             <div className="flex items-center justify-between gap-4">
                                 <div>
@@ -103,7 +82,7 @@ export default function CommandSearch({ shortcuts , onSelect }) {
                                     </p>
                                 </div>
 
-                                <p className="shrink-0 text-sm text-[var(--accent-dark)]">
+                                <p className="shrink-0 text-sm text-[var(--accent)]">
                                     {formatShortcut(shortcut.keys)}
                                 </p>
                             </div>
@@ -119,6 +98,36 @@ export default function CommandSearch({ shortcuts , onSelect }) {
             </div>
         </div>
     )
+}
+
+function matchesShortcutSearch(shortcut , queryWords) {
+    const searchableText = getSearchText(shortcut)
+
+    const modifierWords = ["cmd" , "shift" , "ctrl" , "control" , "option" , "alt"]
+
+    const queryHasModifier =
+        queryWords.some((word) => modifierWords.includes(word))
+
+    const shortcutWords = formatShortcut(shortcut.keys)
+        .toLowerCase()
+        .replaceAll("command" , "cmd")
+        .replaceAll("control" , "ctrl")
+        .replaceAll("option" , "alt")
+        .replaceAll("+" , " ")
+        .split(" ")
+        .filter(Boolean)
+
+    return queryWords.every((word) => {
+        if (modifierWords.includes(word)) {
+            return shortcutWords.includes(word)
+        }
+
+        if (queryHasModifier && word.length === 1) {
+            return shortcutWords.includes(word)
+        }
+
+        return searchableText.includes(word)
+    })
 }
 
 function normalizeSearch(text) {

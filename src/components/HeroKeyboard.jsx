@@ -1,72 +1,238 @@
+import { useState } from "react"
+import "../styles/keyboard.css"
+
 const rows = [
     [
-        { label : "Esc" } , { label : "1" } , { label : "2" } , { label : "3" } , { label : "4" } , { label : "5" } ,
-        { label : "6" } , { label : "7" } , { label : "8" } , { label : "9" } , { label : "0" } , { label : "-" } , { label : "=" }
+        { label : "`" , sub : "~" } ,
+        { label : "1" , sub : "!" } ,
+        { label : "2" , sub : "@" } ,
+        { label : "3" , sub : "#" } ,
+        { label : "4" , sub : "$" } ,
+        { label : "5" , sub : "%" } ,
+        { label : "6" , sub : "^" } ,
+        { label : "7" , sub : "&" } ,
+        { label : "8" , sub : "*" } ,
+        { label : "9" , sub : "(" } ,
+        { label : "0" , sub : ")" } ,
+        { label : "-" , sub : "_" } ,
+        { label : "=" , sub : "+" } ,
+        { label : "delete" , wide : "delete" }
     ] ,
     [
-        { label : "Tab" , wide : "tab" } , { label : "Q" } , { label : "W" } , { label : "E" } , { label : "R" } ,
-        { label : "T" } , { label : "Y" } , { label : "U" } , { label : "I" } , { label : "O" } , { label : "P" } ,
-        { label : "[" } , { label : "]" }
+        { label : "tab" , wide : "tab" } ,
+        { label : "Q" } , { label : "W" } , { label : "E" } , { label : "R" } , { label : "T" } ,
+        { label : "Y" } , { label : "U" } , { label : "I" } , { label : "O" } , { label : "P" } ,
+        { label : "[" , sub : "{" } ,
+        { label : "]" , sub : "}" } ,
+        { label : "\\" , sub : "|" }
     ] ,
     [
-        { label : "Caps" , wide : "caps" } , { label : "A" } , { label : "S" } , { label : "D" } , { label : "F" } ,
-        { label : "G" } , { label : "H" } , { label : "J" } , { label : "K" } , { label : "L" } , { label : ";" } , { label : "'" }
+        { label : "caps lock" , wide : "caps" } ,
+        { label : "A" } , { label : "S" } , { label : "D" } , { label : "F" } , { label : "G" } ,
+        { label : "H" } , { label : "J" } , { label : "K" } , { label : "L" } ,
+        { label : ";" , sub : ":" } ,
+        { label : "'" , sub : '"' } ,
+        { label : "return" , wide : "return" }
     ] ,
     [
-        { label : "Shift" , id : "ShiftLeft" , wide : "shift" } , { label : "Z" } , { label : "X" } , { label : "C" } ,
-        { label : "V" } , { label : "B" } , { label : "N" } , { label : "M" } , { label : "," } , { label : "." } ,
-        { label : "/" } , { label : "Shift" , id : "ShiftRight" , wide : "shift" }
-    ] ,
-    [
-        { label : "Fn" } ,
-        { label : "Control" , id : "ControlLeft" , wide : "modifier" } ,
-        { label : "Option" , id : "OptionLeft" , wide : "modifier" } ,
-        { label : "Cmd" , id : "CmdLeft" , wide : "cmd" } ,
-        { label : "Space" , wide : "space" } ,
-        { label : "Cmd" , id : "CmdRight" , wide : "cmd" } ,
-        { label : "Option" , id : "OptionRight" , wide : "modifier" }
+        { label : "shift" , id : "ShiftLeft" , wide : "shiftLeft" } ,
+        { label : "Z" } , { label : "X" } , { label : "C" } , { label : "V" } , { label : "B" } ,
+        { label : "N" } , { label : "M" } ,
+        { label : "," , sub : "<" } ,
+        { label : "." , sub : ">" } ,
+        { label : "/" , sub : "?" } ,
+        { label : "shift" , id : "ShiftRight" , wide : "shiftRight" }
     ]
 ]
 
-export default function HeroKeyboard({ activeKeys = [] , onKeyClick }) {
-    return (
-        <div className="mx-auto mt-10 max-w-6xl">
-            <div className="rounded-[2rem] border border-[#2a2a24] bg-[#171914] p-4 shadow-[0_30px_80px_rgba(0,0,0,0.28)] md:p-7">
-                <div className="space-y-2 md:space-y-3">
-                    {rows.map((row , rowIndex) => (
-                        <div key={rowIndex} className="flex justify-center gap-2 md:gap-3">
-                            {row.map((key , keyIndex) => {
-                                const keyId = key.id || key.label
-                                const isActive = activeKeys.includes(keyId) || activeKeys.includes(key.label)
+const bottomLeftKeys = [
+    { label : "fn" } ,
+    { label : "control" , id : "ControlLeft" , sub : "⌃" } ,
+    { label : "option" , id : "OptionLeft" , sub : "⌥" } ,
+    { label : "command" , id : "CmdLeft" , sub : "⌘" , wide : "cmd" } ,
+    { label : "" , id : "Space" , wide : "space" } ,
+    { label : "command" , id : "CmdRight" , sub : "⌘" , wide : "cmd" } ,
+    { label : "option" , id : "OptionRight" , sub : "⌥" }
+]
 
-                                return (
-                                    <button
-                                        key={`${keyId}-${keyIndex}`}
-                                        onClick={() => onKeyClick?.(keyId)}
-                                        className={`h-12 rounded-xl border text-sm font-medium transition-all duration-200 md:h-16 ${getKeyWidth(key.wide)
-                                            } ${isActive
-                                                ? "border-[#9fbd88] bg-[#9fbd88] text-[#11140f] shadow-[0_0_30px_rgba(159,189,136,0.45)] -translate-y-1"
-                                                : "border-[#34372e] bg-[#22251d] text-[#d8d2c2] shadow-[inset_0_-4px_0_rgba(0,0,0,0.25)] hover:bg-[#2b2f25]"
-                                            }`}
-                                    >
-                                        {key.label}
-                                    </button>
-                                )
-                            })}
+export default function HeroKeyboard({ activeKeys = [] , onKeyClick }) {
+    const [tilt , setTilt] = useState({
+        x : 0 ,
+        y : 0
+    })
+
+    function handleMouseMove(e) {
+        const rect = e.currentTarget.getBoundingClientRect()
+
+        const mouseX = e.clientX - rect.left
+        const mouseY = e.clientY - rect.top
+
+        const centerX = rect.width / 2
+        const centerY = rect.height / 2
+
+        const rotateY = ((mouseX - centerX) / centerX) * 8
+        const rotateX = -((mouseY - centerY) / centerY) * 8
+
+        setTilt({
+            x : rotateX ,
+            y : rotateY
+        })
+    }
+
+    function resetTilt() {
+        setTilt({
+            x : 0 ,
+            y : 0
+        })
+    }
+
+    return (
+        <div
+            onMouseMove={handleMouseMove}
+            onMouseLeave={resetTilt}
+            className="mt-4 [perspective:1800px]"
+        >
+            <div
+                style={{
+                    transform : `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`
+                }}
+                className="keyboard-shell transition-transform duration-150 ease-out"
+            >
+                <div className="keyboard-content space-y-[6px]">
+                    {rows.map((row , rowIndex) => (
+                        <div
+                            key={rowIndex}
+                            className="keyboard-row"
+                        >
+                            {row.map((item , keyIndex) => (
+                                <KeyboardKey
+                                    key={`${item.label}-${keyIndex}`}
+                                    item={item}
+                                    activeKeys={activeKeys}
+                                    onKeyClick={onKeyClick}
+                                />
+                            ))}
                         </div>
                     ))}
+
+                    <div className="keyboard-row">
+                        {bottomLeftKeys.map((item , keyIndex) => (
+                            <KeyboardKey
+                                key={`${item.label}-${keyIndex}`}
+                                item={item}
+                                activeKeys={activeKeys}
+                                onKeyClick={onKeyClick}
+                            />
+                        ))}
+
+                        <KeyboardKey
+                            item={{ label : "◀" , wide : "arrow" }}
+                            activeKeys={activeKeys}
+                            onKeyClick={onKeyClick}
+                        />
+
+                        <div className="flex w-[44px] flex-col gap-[4px]">
+                            <KeyboardKey
+                                item={{ label : "▲" , wide : "arrowHalf" }}
+                                activeKeys={activeKeys}
+                                onKeyClick={onKeyClick}
+                            />
+
+                            <KeyboardKey
+                                item={{ label : "▼" , wide : "arrowHalf" }}
+                                activeKeys={activeKeys}
+                                onKeyClick={onKeyClick}
+                            />
+                        </div>
+
+                        <KeyboardKey
+                            item={{ label : "▶" , wide : "arrow" }}
+                            activeKeys={activeKeys}
+                            onKeyClick={onKeyClick}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
     )
 }
 
+function KeyboardKey({ item , activeKeys , onKeyClick }) {
+    const keyId = item.id || item.label
+
+    const isActive =
+        activeKeys.includes(keyId) ||
+        activeKeys.includes(item.label)
+
+    return (
+        <button
+            onClick={() => onKeyClick?.(keyId)}
+            className={`keyboard-key ${getKeyHeight(item.wide)} ${getKeyWidth(item.wide)} ${
+                isActive ? "is-active" : ""
+            }`}
+        >
+            <span className="keyboard-key-face" />
+
+            <span className="keyboard-key-shine" />
+
+            <span className="keyboard-key-label-wrap">
+                {item.sub && (
+                    <span className="keyboard-key-sub">
+                        {item.sub}
+                    </span>
+                )}
+
+                <span className={`keyboard-key-label ${getLabelClass(item)}`}>
+                    {item.label}
+                </span>
+            </span>
+        </button>
+    )
+}
+
+function getKeyHeight(type) {
+    if (type === "arrowHalf") return "h-[22px]"
+
+    return "h-[48px]"
+}
+
 function getKeyWidth(type) {
-    if (type === "space") return "w-52 md:w-96"
-    if (type === "shift") return "w-24 md:w-32"
-    if (type === "caps") return "w-20 md:w-28"
-    if (type === "tab") return "w-16 md:w-24"
-    if (type === "modifier") return "w-20 md:w-28"
-    if (type === "cmd") return "w-16 md:w-24"
-    return "w-12 md:w-16"
+    if (type === "delete") return "w-[67px]"
+    if (type === "tab") return "w-[66px]"
+    if (type === "caps") return "w-[92px]"
+    if (type === "return") return "w-[80px]"
+    if (type === "shiftLeft") return "w-[112px]"
+    if (type === "shiftRight") return "w-[116px]"
+    if (type === "cmd") return "w-[68px]"
+    if (type === "space") return "w-[270px]"
+    if (type === "arrow") return "w-[44px]"
+    if (type === "arrowHalf") return "w-[44px]"
+
+    return "w-[50px]"
+}
+
+function getLabelClass(item) {
+    if (isSmallLabel(item.label)) {
+        return "keyboard-key-small"
+    }
+
+    if (item.wide === "arrowHalf" || item.wide === "arrow") {
+        return "keyboard-key-arrow"
+    }
+
+    return "keyboard-key-normal"
+}
+
+function isSmallLabel(label) {
+    return [
+        "delete" ,
+        "tab" ,
+        "caps lock" ,
+        "return" ,
+        "shift" ,
+        "fn" ,
+        "control" ,
+        "option" ,
+        "command"
+    ].includes(label)
 }

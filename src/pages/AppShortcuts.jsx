@@ -62,7 +62,7 @@ export default function AppShortcuts({ apps }) {
                         <input
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Search cmd p , cmd shift p..."
+                            placeholder="Search cmd p" 
                             className="w-full rounded-full border border-[var(--border)] bg-[var(--surface)] px-5 py-3 text-sm outline-none md:w-80"
                         />
                     </div>
