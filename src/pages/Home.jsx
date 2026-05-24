@@ -59,18 +59,18 @@ export default function Home({ apps }) {
     const keyboardKeys = hoveredShortcut?.keys || selectedKeys
 
     return (
-        <main className="h-screen overflow-hidden bg-[var(--bg)]">
+        <main className="h-screen overflow-hidden bg-(--bg)">
             <Navbar />
 
-            <section className="mx-auto flex h-[calc(100vh-88px)] max-w-7xl flex-col px-6 pb-6">
+            <section className="mx-auto flex h-[calc(100vh-88px) max-w-7xl flex-col px-6 pb-6">
                 <div className="shrink-0 pt-4">
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h1 className="text-4xl font-semibold text-[var(--text)]">
+                            <h1 className="text-4xl font-semibold text-(--text)">
                                 Find Shortcuts
                             </h1>
 
-                            <p className="mt-2 text-[var(--muted)]">
+                            <p className="mt-2 text-(--muted)">
                                 Search shortcuts or click keys to build a shortcut visually
                             </p>
                         </div>
@@ -79,7 +79,7 @@ export default function Home({ apps }) {
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search 'cmd p'"
-                            className="w-full rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm outline-none transition-all placeholder:text-slate-500 focus:border-white/20 focus:bg-white/[0.07] md:w-[420px]"
+                            className="w-full rounded-full border border-white/10 bg-white/4 px-5 py-3 text-sm outline-none transition-all placeholder:text-slate-500 focus:border-white/20 focus:bg-white/[0.07] md:w-105"
                         />
                     </div>
 
@@ -89,7 +89,7 @@ export default function Home({ apps }) {
                                 onClick={() => setActiveApp("all")}
                                 className={`rounded-full border px-4 py-2 text-sm transition-all ${
                                     activeApp === "all"
-                                        ? "border-white bg-white text-slate-950 shadow-[0_0_24px_rgba(255,255,255,0.22)]"
+                                        ? "border-white bg-white text-slate-950 shadow-[0_0_24px_rgba(255,255,255,0.22)"
                                         : "border-white/10 bg-white/[0.04] text-slate-300 hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
                                 }`}
                             >
@@ -102,7 +102,7 @@ export default function Home({ apps }) {
                                     onClick={() => setActiveApp(app.id)}
                                     className={`rounded-full border px-4 py-2 text-sm transition-all ${
                                         activeApp === app.id
-                                            ? "border-white bg-white text-slate-950 shadow-[0_0_24px_rgba(255,255,255,0.22)]"
+                                            ? "border-white bg-white text-slate-950 shadow-[0_0_24px_rgba(255,255,255,0.22)"
                                             : "border-white/10 bg-white/[0.04] text-slate-300 hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
                                     }`}
                                 >
@@ -121,20 +121,20 @@ export default function Home({ apps }) {
                         <PreviewPanel shortcut={hoveredShortcut} />
                     </div>
 
-                    <div className="mt-5 flex min-h-[44px] flex-wrap items-center gap-2">
-                        <span className="text-sm text-[var(--muted)]">
+                    <div className="mt-5 flex min-h-11 flex-wrap items-center gap-2">
+                        <span className="text-sm text-(--muted)">
                             Current shortcut :
                         </span>
 
                         {keyboardKeys.length === 0 ? (
-                            <span className="text-sm text-[var(--muted)]">
+                            <span className="text-sm text-(--muted)">
                                 No keys selected
                             </span>
                         ) : (
                             sortShortcutKeys(keyboardKeys).map((key) => (
                                 <span
                                     key={key}
-                                    className="rounded-full bg-white/[0.06] px-3 py-1 text-sm text-white"
+                                    className="rounded-full bg-white/6 px-3 py-1 text-sm text-white"
                                 >
                                     {formatKey(key)}
                                 </span>
@@ -144,7 +144,7 @@ export default function Home({ apps }) {
                         {selectedKeys.length > 0 && (
                             <button
                                 onClick={clearKeys}
-                                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-sm text-white"
+                                className="rounded-full border border-white/10 bg-white/4 px-3 py-1 text-sm text-white"
                             >
                                 Clear
                             </button>
@@ -157,7 +157,7 @@ export default function Home({ apps }) {
                     className="mt-3 min-h-0 flex-1 overflow-y-auto px-1 pt-5 pr-2"
                 >
                     {results.length === 0 && (
-                        <p className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 text-[var(--muted)]">
+                        <p className="rounded-3xl border border-white/10 bg-white/4 p-6 text-(--muted)">
                             No shortcuts found
                         </p>
                     )}
@@ -190,11 +190,11 @@ export default function Home({ apps }) {
 
 function PreviewPanel({ shortcut }) {
     return (
-        <div className="mt-4 hidden h-full min-h-[250px] rounded-[2rem] border border-white/10 bg-white/[0.035] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.24)] lg:block">
+        <div className="mt-4 hidden h-full min-h-62.5 rounded-4xl border border-white/10 bg-white/[0.035] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.24) lg:block">
             {shortcut ? (
                 <div className="flex h-full flex-col">
                     <div className="flex items-center gap-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-lg font-bold text-slate-950 shadow-[0_0_28px_rgba(255,255,255,0.18)]">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-lg font-bold text-slate-950 shadow-[0_0_28px_rgba(255,255,255,0.18)">
                             {shortcut.app?.[0]}
                         </div>
 
@@ -260,7 +260,7 @@ function ShortcutCard({ shortcut , onHover , onOpen }) {
         <button
             onMouseEnter={() => onHover(shortcut)}
             onClick={() => onOpen(shortcut)}
-            className="group rounded-3xl border border-white/10 bg-white/[0.035] p-5 text-left transition-all duration-200 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-[0_0_34px_rgba(255,255,255,0.16),0_18px_45px_rgba(0,0,0,0.30)]"
+            className="group rounded-3xl border border-white/10 bg-white/[0.035] p-5 text-left transition-all duration-200 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-[0_0_34px_rgba(255,255,255,0.16),0_18px_45px_rgba(0,0,0,0.30)"
         >
             <p className="text-xs font-medium text-slate-400">
                 {shortcut.app}

@@ -90,7 +90,7 @@ export default function HeroKeyboard({ activeKeys = [] , onKeyClick }) {
         <div
             onMouseMove={handleMouseMove}
             onMouseLeave={resetTilt}
-            className="mt-4 [perspective:1800px]"
+            className="mt-4 perspective-[1800px]"
         >
             <div
                 style={{
@@ -98,7 +98,7 @@ export default function HeroKeyboard({ activeKeys = [] , onKeyClick }) {
                 }}
                 className="keyboard-shell transition-transform duration-150 ease-out"
             >
-                <div className="keyboard-content space-y-[6px]">
+                <div className="keyboard-content space-y-1.5">
                     {rows.map((row , rowIndex) => (
                         <div
                             key={rowIndex}
@@ -131,7 +131,7 @@ export default function HeroKeyboard({ activeKeys = [] , onKeyClick }) {
                             onKeyClick={onKeyClick}
                         />
 
-                        <div className="flex w-[44px] flex-col gap-[4px]">
+                        <div className="flex w-11 flex-col gap-1">
                             <KeyboardKey
                                 item={{ label : "▲" , wide : "arrowHalf" }}
                                 activeKeys={activeKeys}

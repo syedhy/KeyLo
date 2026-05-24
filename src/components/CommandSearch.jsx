@@ -46,17 +46,17 @@ export default function CommandSearch({ shortcuts , onSelect }) {
         >
             <div
                 onClick={(e) => e.stopPropagation()}
-                className="w-full max-w-2xl overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow)]"
+                className="w-full max-w-2xl overflow-hidden rounded-4xl border border-(--border) bg-(--surface) shadow-(--shadow)"
             >
                 <input
-                    autoFocus
+                    autoFocuS
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search cmd p , new f , vs code cmd shift e..."
-                    className="w-full border-b border-[var(--border)] bg-transparent px-6 py-5 text-lg text-[var(--text)] outline-none placeholder:text-[var(--muted)]"
+                    className="w-full border-b border-(--border) bg-transparent px-6 py-5 text-lg text-(--text) outline-none placeholder:text-(--muted)"
                 />
 
-                <div className="max-h-[420px] overflow-y-auto p-3">
+                <div className="max-h-105 overflow-y-auto p-3">
                     {results.map((shortcut) => (
                         <button
                             key={`${shortcut.app}-${shortcut.title}`}
@@ -65,24 +65,24 @@ export default function CommandSearch({ shortcuts , onSelect }) {
                                 setOpen(false)
                                 setQuery("")
                             }}
-                            className="w-full rounded-2xl p-4 text-left transition-colors hover:bg-[var(--surface-soft)]"
+                            className="w-full rounded-2xl p-4 text-left transition-colors hover:bg-(--surface-soft)"
                         >
                             <div className="flex items-center justify-between gap-4">
                                 <div>
-                                    <p className="text-xs text-[var(--muted)]">
+                                    <p className="text-xs text-(--muted)">
                                         {shortcut.app}
                                     </p>
 
-                                    <p className="mt-1 text-sm font-semibold text-[var(--text)]">
+                                    <p className="mt-1 text-sm font-semibold text-(--text)">
                                         {shortcut.title}
                                     </p>
 
-                                    <p className="mt-1 text-xs text-[var(--muted)]">
+                                    <p className="mt-1 text-xs text-(--muted)">
                                         {shortcut.description || "No description added yet"}
                                     </p>
                                 </div>
 
-                                <p className="shrink-0 text-sm text-[var(--accent)]">
+                                <p className="shrink-0 text-sm text-(--accent)">
                                     {formatShortcut(shortcut.keys)}
                                 </p>
                             </div>
@@ -90,7 +90,7 @@ export default function CommandSearch({ shortcuts , onSelect }) {
                     ))}
 
                     {results.length === 0 && (
-                        <p className="p-6 text-sm text-[var(--muted)]">
+                        <p className="p-6 text-sm text-(--muted)">
                             No shortcuts found
                         </p>
                     )}

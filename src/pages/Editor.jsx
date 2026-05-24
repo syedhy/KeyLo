@@ -70,22 +70,22 @@ export default function Editor({ apps , setApps }) {
     }
 
     return (
-        <main className="h-screen overflow-hidden bg-[var(--bg)]">
+        <main className="h-screen overflow-hidden bg-(--bg)">
             <Navbar />
 
-            <section className="mx-auto flex h-[calc(100vh-88px)] max-w-7xl flex-col px-6 pb-6">
+            <section className="mx-auto flex h-[calc(100vh-88px) max-w-7xl flex-col px-6 pb-6">
                 <div className="shrink-0 pt-4">
-                    <h1 className="text-4xl font-semibold text-[var(--text)]">
+                    <h1 className="text-4xl font-semibold text-(--text)">
                         Shortcut Editor
                     </h1>
 
-                    <p className="mt-2 text-[var(--muted)]">
+                    <p className="mt-2 text-(--muted)">
                         Add and delete shortcuts from your current shortcut library
                     </p>
 
                     <form
                         onSubmit={addShortcut}
-                        className="mt-6 grid gap-3 rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-5 md:grid-cols-2 lg:grid-cols-[1fr_1fr_2fr_1.4fr_auto]"
+                        className="mt-6 grid gap-3 rounded-4xl border border-(--border) bg-(--surface) p-5 md:grid-cols-2 lg:grid-cols-[1fr_1fr_2fr_1.4fr_auto]"
                     >
                         <select
                             value={form.appId}
@@ -95,7 +95,7 @@ export default function Editor({ apps , setApps }) {
                                     appId : e.target.value
                                 })
                             }
-                            className="rounded-full border border-[var(--border)] bg-[var(--bg)] px-5 py-3 text-sm outline-none"
+                            className="rounded-full border border-(--border) bg-(--bg) px-5 py-3 text-sm outline-none"
                         >
                             {apps.map((app) => (
                                 <option key={app.id} value={app.id}>
@@ -113,7 +113,7 @@ export default function Editor({ apps , setApps }) {
                                 })
                             }
                             placeholder="Shortcut title"
-                            className="rounded-full border border-[var(--border)] bg-[var(--bg)] px-5 py-3 text-sm outline-none"
+                            className="rounded-full border border-(--border) bg-(--bg) px-5 py-3 text-sm outline-none"
                         />
 
                         <input
@@ -125,7 +125,7 @@ export default function Editor({ apps , setApps }) {
                                 })
                             }
                             placeholder="Description"
-                            className="rounded-full border border-[var(--border)] bg-[var(--bg)] px-5 py-3 text-sm outline-none"
+                            className="rounded-full border border-(--border) bg-(--bg) px-5 py-3 text-sm outline-none"
                         />
 
                         <input
@@ -137,10 +137,10 @@ export default function Editor({ apps , setApps }) {
                                 })
                             }
                             placeholder="Cmd + Shift + P"
-                            className="rounded-full border border-[var(--border)] bg-[var(--bg)] px-5 py-3 text-sm outline-none"
+                            className="rounded-full border border-(--border) bg-(--bg) px-5 py-3 text-sm outline-none"
                         />
 
-                        <button className="rounded-full bg-[var(--text)] px-6 py-3 text-sm text-[var(--surface)]">
+                        <button className="rounded-full bg-(--text) px-6 py-3 text-sm text-(--surface)">
                             Add
                         </button>
                     </form>
@@ -151,21 +151,21 @@ export default function Editor({ apps , setApps }) {
                         {allShortcuts.map((shortcut) => (
                             <div
                                 key={`${shortcut.app}-${shortcut.title}`}
-                                className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5"
+                                className="rounded-3xl border border-(--border) bg-(--surface) p-5"
                             >
-                                <p className="text-xs text-[var(--muted)]">
+                                <p className="text-xs text-(--muted)">
                                     {shortcut.app}
                                 </p>
 
-                                <p className="mt-1 text-sm font-semibold text-[var(--text)]">
+                                <p className="mt-1 text-sm font-semibold text-(--text)">
                                     {shortcut.title}
                                 </p>
 
-                                <p className="mt-2 text-xs leading-5 text-[var(--muted)]">
+                                <p className="mt-2 text-xs leading-5 text-(--muted)">
                                     {shortcut.description || "No description added yet"}
                                 </p>
 
-                                <p className="mt-3 text-sm text-[var(--accent-dark)]">
+                                <p className="mt-3 text-sm text-(--accent-dark)">
                                     {formatShortcut(shortcut.keys)}
                                 </p>
 

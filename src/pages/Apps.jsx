@@ -35,18 +35,18 @@ export default function Apps({ apps }) {
     } , [allShortcuts , activeApp , search])
 
     return (
-        <main className="h-screen overflow-hidden bg-[var(--bg)]">
+        <main className="h-screen overflow-hidden bg-(--bg)">
             <Navbar />
 
-            <section className="mx-auto flex h-[calc(100vh-88px)] max-w-7xl flex-col px-6 pb-6">
+            <section className="mx-auto flex h-[calc(100vh-88px) max-w-7xl flex-col px-6 pb-6">
                 <div className="shrink-0 pt-6">
                     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h1 className="text-4xl font-semibold text-[var(--text)]">
+                            <h1 className="text-4xl font-semibold text-(--text)">
                                 List Shortcuts
                             </h1>
 
-                            <p className="mt-2 text-[var(--muted)]">
+                            <p className="mt-2 text-(--muted)">
                                 Browse all shortcuts without the keyboard
                             </p>
                         </div>
@@ -55,7 +55,7 @@ export default function Apps({ apps }) {
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search 'command palette'" 
-                            className="w-full rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm outline-none transition-all placeholder:text-slate-500 focus:border-white/20 focus:bg-white/[0.07] md:w-[420px]"
+                            className="w-full rounded-full border border-white/10 bg-white/4 px-5 py-3 text-sm outline-none transition-all placeholder:text-slate-500 focus:border-white/20 focus:bg-white/[0.07] md:w-105"
                         />
                     </div>
 
@@ -65,7 +65,7 @@ export default function Apps({ apps }) {
                                 onClick={() => setActiveApp("all")}
                                 className={`rounded-full border px-4 py-2 text-sm transition-all ${
                                     activeApp === "all"
-                                        ? "border-white bg-white text-slate-950 shadow-[0_0_24px_rgba(255,255,255,0.22)]"
+                                        ? "border-white bg-white text-slate-950 shadow-[0_0_24px_rgba(255,255,255,0.22)"
                                         : "border-white/10 bg-white/[0.04] text-slate-300 hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
                                 }`}
                             >
@@ -78,7 +78,7 @@ export default function Apps({ apps }) {
                                     onClick={() => setActiveApp(app.id)}
                                     className={`rounded-full border px-4 py-2 text-sm transition-all ${
                                         activeApp === app.id
-                                            ? "border-white bg-white text-slate-950 shadow-[0_0_24px_rgba(255,255,255,0.22)]"
+                                            ? "border-white bg-white text-slate-950 shadow-[0_0_24px_rgba(255,255,255,0.22)"
                                             : "border-white/10 bg-white/[0.04] text-slate-300 hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
                                     }`}
                                 >
@@ -91,7 +91,7 @@ export default function Apps({ apps }) {
 
                 <div className="mt-5 min-h-0 flex-1 overflow-y-auto px-1 pt-5 pr-2">
                     {results.length === 0 && (
-                        <p className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 text-[var(--muted)]">
+                        <p className="rounded-3xl border border-white/10 bg-white/4 p-6 text-(--muted)">
                             No shortcuts found
                         </p>
                     )}
@@ -125,7 +125,7 @@ function ShortcutCard({ shortcut , onOpen }) {
     return (
         <button
             onClick={() => onOpen(shortcut)}
-            className="group rounded-3xl border border-white/10 bg-white/[0.035] p-5 text-left transition-all duration-200 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-[0_0_34px_rgba(255,255,255,0.16),0_18px_45px_rgba(0,0,0,0.30)]"
+            className="group rounded-3xl border border-white/10 bg-white/[0.035] p-5 text-left transition-all duration-200 hover:-translate-y-1 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-[0_0_34px_rgba(255,255,255,0.16),0_18px_45px_rgba(0,0,0,0.30)"
         >
             <p className="text-xs font-medium text-slate-400">
                 {shortcut.app}

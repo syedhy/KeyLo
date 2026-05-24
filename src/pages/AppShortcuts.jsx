@@ -36,25 +36,25 @@ export default function AppShortcuts({ apps }) {
     } , [shortcuts , search])
 
     return (
-        <main className="h-screen overflow-hidden bg-[var(--bg)]">
+        <main className="h-screen overflow-hidden bg-(--bg)">
             <Navbar />
 
-            <section className="mx-auto flex h-[calc(100vh-88px)] max-w-7xl flex-col px-6 pb-6">
+            <section className="mx-auto flex h-[calc(100vh-88px) max-w-7xl flex-col px-6 pb-6">
                 <div className="shrink-0 pt-4">
                     <Link
                         to="/apps"
-                        className="text-sm text-[var(--muted)]"
+                        className="text-sm text-(--muted)"
                     >
                         ← Back to apps
                     </Link>
 
                     <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                         <div>
-                            <h1 className="text-4xl font-semibold text-[var(--text)]">
+                            <h1 className="text-4xl font-semibold text-(--text)">
                                 {app.name}
                             </h1>
 
-                            <p className="mt-2 text-[var(--muted)]">
+                            <p className="mt-2 text-(--muted)">
                                 Search shortcuts and hover any card to highlight keys
                             </p>
                         </div>
@@ -63,7 +63,7 @@ export default function AppShortcuts({ apps }) {
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search cmd p" 
-                            className="w-full rounded-full border border-[var(--border)] bg-[var(--surface)] px-5 py-3 text-sm outline-none md:w-80"
+                            className="w-full rounded-full border border-(--border) bg-(--surface) px-5 py-3 text-sm outline-none md:w-80"
                         />
                     </div>
 
@@ -72,31 +72,31 @@ export default function AppShortcuts({ apps }) {
                             activeKeys={selectedShortcut?.keys || []}
                         />
 
-                        <div className="mt-10 hidden rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-5 lg:block">
-                            <p className="text-xs text-[var(--muted)]">
+                        <div className="mt-10 hidden rounded-4xl border border-(--border) bg-(--surface) p-5 lg:block">
+                            <p className="text-xs text-(--muted)">
                                 Preview
                             </p>
 
                             {selectedShortcut ? (
                                 <>
-                                    <p className="mt-3 text-sm text-[var(--muted)]">
+                                    <p className="mt-3 text-sm text-(--muted)">
                                         {selectedShortcut.app}
                                     </p>
 
-                                    <h2 className="mt-1 text-xl font-semibold text-[var(--text)]">
+                                    <h2 className="mt-1 text-xl font-semibold text-(--text)">
                                         {selectedShortcut.title}
                                     </h2>
 
-                                    <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
+                                    <p className="mt-3 text-sm leading-6 text-(--muted)">
                                         {selectedShortcut.description || "No description added yet"}
                                     </p>
 
-                                    <p className="mt-4 text-sm font-semibold text-[var(--accent-dark)]">
+                                    <p className="mt-4 text-sm font-semibold text-(--accent-dark)">
                                         {formatShortcut(selectedShortcut.keys)}
                                     </p>
                                 </>
                             ) : (
-                                <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
+                                <p className="mt-3 text-sm leading-6 text-(--muted)">
                                     Hover a shortcut card to preview its details here
                                 </p>
                             )}
@@ -109,7 +109,7 @@ export default function AppShortcuts({ apps }) {
                     className="mt-6 min-h-0 flex-1 overflow-y-auto pr-2"
                 >
                     {filteredShortcuts.length === 0 && (
-                        <p className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 text-[var(--muted)]">
+                        <p className="rounded-3xl border border-(--border) bg-(--surface) p-6 text-(--muted)">
                             No shortcuts found
                         </p>
                     )}
@@ -120,21 +120,21 @@ export default function AppShortcuts({ apps }) {
                                 key={`${shortcut.app}-${shortcut.title}`}
                                 onMouseEnter={() => setSelectedShortcut(shortcut)}
                                 onClick={() => setOpenedShortcut(shortcut)}
-                                className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 text-left transition-all hover:shadow-lg"
+                                className="rounded-3xl border border-(--border) bg-(--surface) p-5 text-left transition-all hover:shadow-lg"
                             >
-                                <p className="text-xs text-[var(--muted)]">
+                                <p className="text-xs text-(--muted)">
                                     {shortcut.app}
                                 </p>
 
-                                <p className="mt-1 text-sm font-semibold text-[var(--text)]">
+                                <p className="mt-1 text-sm font-semibold text-(--text)">
                                     {shortcut.title}
                                 </p>
 
-                                <p className="mt-2 text-xs leading-5 text-[var(--muted)]">
+                                <p className="mt-2 text-xs leading-5 text-(--muted)">
                                     {shortcut.description || "No description added yet"}
                                 </p>
 
-                                <p className="mt-3 text-sm text-[var(--accent-dark)]">
+                                <p className="mt-3 text-sm text-(--accent-dark)">
                                     {formatShortcut(shortcut.keys)}
                                 </p>
                             </button>
