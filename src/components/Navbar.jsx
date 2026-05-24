@@ -10,9 +10,23 @@ export default function Navbar() {
 
     return (
         <nav className="relative z-20 flex items-center justify-between px-6 py-5 md:px-10">
-            <h1 className="text-xl font-semibold tracking-tight text-[var(--text)]">
-                KeyLo
-            </h1>
+            <div className="flex items-center gap-3">
+                <div className="flex h-14 w-14 items-center justify-center rounded-[1.35rem] border border-white/10 bg-white/[0.06] shadow-[0_0_36px_rgba(255,255,255,0.10)]">
+                    <span className="text-2xl font-semibold text-white">
+                        K
+                    </span>
+                </div>
+
+                <div>
+                    <h1 className="text-[1.35rem] font-semibold tracking-tight text-[var(--text)]">
+                        KeyLo
+                    </h1>
+
+                    <p className="text-xs text-slate-500">
+                        Visual shortcut explorer
+                    </p>
+                </div>
+            </div>
 
             <div className="hidden items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2 py-2 shadow-sm backdrop-blur-xl md:flex">
                 {links.map((link) => (
@@ -32,9 +46,12 @@ export default function Navbar() {
                 ))}
             </div>
 
-            <button className="hidden rounded-full bg-white px-5 py-2.5 text-sm font-medium text-slate-950 transition-all hover:shadow-[0_0_24px_rgba(255,255,255,0.25)] md:block">
-                Explore
-            </button>
+            <a
+                href="mailto:yourmail@gmail.com"
+                className="hidden rounded-full border border-white/10 bg-white/[0.05] px-5 py-2.5 text-sm font-medium text-white transition-all hover:border-white/20 hover:bg-white/[0.10] hover:shadow-[0_0_30px_rgba(255,255,255,0.10)] md:block"
+            >
+                Contact
+            </a>
 
             <button className="rounded-full border border-white/10 bg-white/[0.04] p-3 md:hidden">
                 <Menu size={18} />
