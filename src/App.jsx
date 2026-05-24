@@ -6,27 +6,32 @@ import Apps from "./pages/Apps"
 import AppShortcuts from "./pages/AppShortcuts"
 import Editor from "./pages/Editor"
 
-import { apps as sampleApps } from "./data/sampleApps"
-import { getApps } from "./firebase/shortcutService"
+import { getUserApps } from "./firebase/shortcutService"
+import { useAuth } from "./context/useAuth"
 
 export default function App() {
-    const [apps , setApps] = useState(sampleApps)
+    const { user , authLoading } = useAuth()
+    const [apps , setApps] = useState([])
 
     useEffect(() => {
         async function loadApps() {
-            try {
-                const firebaseApps = await getApps()
+            if (!user) {
+                setApps([])
+                return
+            }
 
-                if (firebaseApps.length > 0) {
-                    setApps(firebaseApps)
-                }
+            try {
+                const firebaseApps = await getUserApps(user.uid)
+                setApps(firebaseApps)
             } catch (error) {
-                console.error("Failed to load Firebase apps" , error)
+                console.error("Failed to load user apps" , error)
             }
         }
 
-        loadApps()
-    } , [])
+        if (!authLoading) {
+            loadApps()
+        }
+    } , [user , authLoading])
 
     return (
         <BrowserRouter>
