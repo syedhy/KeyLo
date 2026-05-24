@@ -111,22 +111,22 @@ export default function Editor({ apps , setApps }) {
     }
 
     return (
-        <main className="h-screen overflow-hidden bg-(--bg)">
+        <main className="min-h-screen bg-(--bg)">
             <Navbar />
 
-            <section className="mx-auto flex h-[calc(100vh-88px)] max-w-[92rem] flex-col overflow-hidden px-6 pb-6">
-                <div className="shrink-0 pt-6">
-                    <h1 className="text-4xl font-semibold text-(--text)">
+            <section className="mx-auto flex h-[calc(100vh-56px)] max-w-[82rem] flex-col overflow-hidden px-5 pb-4">
+                <div className="shrink-0 pt-2">
+                    <h1 className="text-2xl font-semibold text-(--text)">
                         Shortcut Editor
                     </h1>
 
-                    <p className="mt-2 text-(--muted)">
+                    <p className="mt-1 text-sm text-(--muted)">
                         Add apps and create shortcuts by clicking keys visually
                     </p>
                 </div>
 
-                <div className="mt-8 grid min-h-0 flex-1 gap-6 overflow-hidden lg:grid-cols-[320px_minmax(0,1fr)]">
-                    <aside className="min-h-0 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.035] p-5">
+                <div className="mt-4 grid min-h-0 flex-1 gap-4 overflow-hidden lg:grid-cols-[280px_minmax(0,1fr)]">
+                    <aside className="min-h-0 overflow-hidden rounded-[2rem] bg-transparent p-5">
                         <h2 className="text-sm font-semibold text-white">
                             Apps
                         </h2>
@@ -147,7 +147,7 @@ export default function Editor({ apps , setApps }) {
                             ))}
                         </div>
 
-                        <div className="mt-6">
+                        <div className="mt-5">
                             <input
                                 value={appName}
                                 onChange={(e) => setAppName(e.target.value)}
@@ -173,28 +173,28 @@ export default function Editor({ apps , setApps }) {
                         </div>
                     </aside>
 
-                    <div className="flex min-h-0 min-w-0 flex-col gap-6 overflow-hidden">
-                        <div className="shrink-0 overflow-visible rounded-[2rem] border border-white/10 bg-white/[0.035] p-5">
-                            <div className="grid gap-4 md:grid-cols-2">
+                    <div className="flex min-h-0 min-w-0 flex-col gap-4 overflow-hidden">
+                        <div className="shrink-0 overflow-visible rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-4">
+                            <div className="grid gap-3 md:grid-cols-2">
                                 <input
                                     value={shortcutTitle}
                                     onChange={(e) => setShortcutTitle(e.target.value)}
                                     placeholder="Shortcut name"
-                                    className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
+                                    className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500"
                                 />
 
                                 <input
                                     value={shortcutDescription}
                                     onChange={(e) => setShortcutDescription(e.target.value)}
                                     placeholder="Description"
-                                    className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500"
+                                    className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500"
                                 />
                             </div>
 
-                            <div className="mt-6 flex justify-center overflow-hidden">
+                            <div className="mt-4 flex justify-center overflow-hidden">
                                 <div className="w-full max-w-[980px] overflow-hidden rounded-[2rem]">
                                     <div className="flex justify-center">
-                                        <div className="origin-top scale-[0.78]">
+                                        <div className="origin-top scale-[0.66]">
                                             <HeroKeyboard
                                                 activeKeys={selectedKeys}
                                                 onKeyClick={handleKeyClick}
@@ -204,7 +204,7 @@ export default function Editor({ apps , setApps }) {
                                 </div>
                             </div>
 
-                            <div className="mt-2 flex flex-wrap items-center gap-2">
+                            <div className="mt-1 flex flex-wrap items-center gap-2">
                                 <span className="text-sm text-slate-500">
                                     Selected keys :
                                 </span>
@@ -236,14 +236,13 @@ export default function Editor({ apps , setApps }) {
 
                             <button
                                 onClick={addShortcut}
-                                className="mt-5 rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:shadow-[0_0_30px_rgba(255,255,255,0.18)]"
+                                className="mt-3 rounded-2xl bg-white px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:shadow-[0_0_30px_rgba(255,255,255,0.18)]"
                             >
                                 Save Shortcut
                             </button>
                         </div>
-
-                        <div className="min-h-0 flex-1 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.035]">
-                            <div className="flex shrink-0 items-center justify-between gap-4 border-b border-white/10 bg-white/[0.035] px-5 py-5 backdrop-blur-xl">
+                        <div className="min-h-0 flex-1 overflow-hidden rounded-[1.5rem] bg-transparent">
+                            <div className="mb-4 flex shrink-0 items-center justify-between gap-4 rounded-[1.5rem] bg-white/[0.035] px-5 py-5 backdrop-blur-xl">
                                 <div>
                                     <h2 className="text-lg font-semibold text-white">
                                         {selectedApp?.name || "No app selected"} Shortcuts
@@ -254,33 +253,29 @@ export default function Editor({ apps , setApps }) {
                                     </p>
                                 </div>
 
-                                <p className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-slate-300">
+                                <p className="rounded-full bg-white/[0.05] px-4 py-2 text-sm text-slate-300">
                                     {selectedApp?.shortcuts?.length || 0} shortcuts
                                 </p>
                             </div>
 
-                            <div className="h-[calc(100%-88px)] overflow-y-auto p-5">
-                                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                            <div className="h-[calc(100%-77px)] overflow-y-auto p-4">
+                                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                                     {selectedApp?.shortcuts?.map((shortcut , index) => (
                                         <div
                                             key={`${shortcut.title}-${index}`}
-                                            className="rounded-3xl border border-white/10 bg-white/[0.035] p-5 transition hover:border-white/25 hover:bg-white/[0.06] hover:shadow-[0_0_18px_rgba(255,255,255,0.10),0_14px_32px_rgba(0,0,0,0.28)]"
+                                            className="rounded-2xl border border-white/10 bg-white/[0.035] p-3 transition hover:border-white/25 hover:bg-white/[0.06]"
                                         >
                                             <p className="text-sm font-semibold text-white">
                                                 {shortcut.title}
                                             </p>
 
-                                            <p className="mt-2 min-h-[36px] text-xs leading-5 text-slate-500">
-                                                {shortcut.description || "No description"}
-                                            </p>
-
-                                            <p className="mt-4 text-sm text-slate-300">
+                                            <p className="mt-3 text-xs text-slate-300">
                                                 {shortcut.keys.map(formatKey).join(" + ")}
                                             </p>
 
                                             <button
                                                 onClick={() => deleteShortcut(index)}
-                                                className="mt-4 rounded-xl border border-red-400/20 px-3 py-2 text-xs font-semibold text-red-200 transition hover:bg-red-500/10"
+                                                className="mt-3 rounded-lg border border-red-400/20 px-2.5 py-1.5 text-[11px] font-semibold text-red-200 transition hover:bg-red-500/10"
                                             >
                                                 Delete
                                             </button>
