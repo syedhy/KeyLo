@@ -1,7 +1,17 @@
+import { BrowserRouter , Routes , Route } from "react-router-dom"
+
+import Home from "./pages/Home"
+import Apps from "./pages/Apps"
+import AppShortcuts from "./pages/AppShortcuts"
+
 export default function App() {
     return (
-        <div className="h-screen bg-black text-white flex items-center justify-center text-5xl font-bold">
-            KeyLo
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/apps" element={<Apps />} />
+                <Route path="/apps/:appId" element={<AppShortcuts />} />
+            </Routes>
+        </BrowserRouter>
     )
 }
