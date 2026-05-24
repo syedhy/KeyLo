@@ -31,7 +31,9 @@ export default function Home({ apps }) {
 
             const matchesKeys =
                 selectedKeys.length === 0 ||
-                selectedKeys.every((key) => shortcut.keys.includes(key))
+                selectedKeys.every((key) =>
+                    shortcut.keys.map(normalizeKey).includes(normalizeKey(key))
+                )
 
             const matchesSearch =
                 queryWords.length === 0 ||
@@ -333,8 +335,7 @@ function getSearchText(shortcut) {
         ${compactKeys}
     `)
 }
-
-function formatKey(key) {
+function normalizeKey(key) {
     const labels = {
         CmdLeft : "Cmd" ,
         CmdRight : "Cmd" ,
@@ -347,6 +348,9 @@ function formatKey(key) {
     }
 
     return labels[key] || key
+}
+function formatKey(key) {
+    return normalizeKey(key)
 }
 
 function formatShortcut(keys) {
