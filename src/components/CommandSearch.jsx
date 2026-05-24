@@ -24,21 +24,38 @@ export default function CommandSearch({ shortcuts , onSelect }) {
     } , [])
 
     const results = useMemo(() => {
-        const text = query.toLowerCase().trim()
+        const queryWords = normalizeSearch(query)
+            .split(" ")
+            .filter(Boolean)
 
-        if (!text) {
+        if (queryWords.length === 0) {
             return shortcuts.slice(0 , 8)
         }
 
         return shortcuts
             .filter((shortcut) => {
-                const searchable =
-                    `${shortcut.app} ${shortcut.title} ${shortcut.description || ""} ${shortcut.keys.join(" ")} ${formatShortcut(shortcut.keys)}`
-                        .toLowerCase()
+                const searchableText = getSearchText(shortcut)
 
-                return searchable.includes(text)
+                const keyWords = ["cmd", "shift", "ctrl", "control", "option", "alt"]
+
+                const shortcutWords = formatShortcut(shortcut.keys)
+                    .toLowerCase()
+                    .replaceAll("command", "cmd")
+                    .replaceAll("control", "ctrl")
+                    .replaceAll("option", "alt")
+                    .replaceAll("+", " ")
+                    .split(" ")
+                    .filter(Boolean)
+
+                return queryWords.every((word) => {
+                    if (keyWords.includes(word) || word.length === 1) {
+                        return shortcutWords.includes(word)
+                    }
+
+                    return searchableText.includes(word)
+                })
             })
-            .slice(0 , 10)
+            .slice(0, 10)
     } , [query , shortcuts])
 
     if (!open) return null
@@ -56,7 +73,7 @@ export default function CommandSearch({ shortcuts , onSelect }) {
                     autoFocus
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search shortcuts..."
+                    placeholder="Search cmd p , vs code cmd shift p..."
                     className="w-full border-b border-[var(--border)] bg-transparent px-6 py-5 text-lg text-[var(--text)] outline-none placeholder:text-[var(--muted)]"
                 />
 
@@ -102,6 +119,33 @@ export default function CommandSearch({ shortcuts , onSelect }) {
             </div>
         </div>
     )
+}
+
+function normalizeSearch(text) {
+    return text
+        .toLowerCase()
+        .replaceAll("command" , "cmd")
+        .replaceAll("control" , "ctrl")
+        .replaceAll("option" , "alt")
+        .replaceAll("+" , " ")
+        .replaceAll("-" , " ")
+        .replaceAll("," , " ")
+        .replace(/\s+/g , " ")
+        .trim()
+}
+
+function getSearchText(shortcut) {
+    const readableKeys = formatShortcut(shortcut.keys)
+    const compactKeys = readableKeys.replaceAll(" + " , " ")
+
+    return normalizeSearch(`
+        ${shortcut.app}
+        ${shortcut.title}
+        ${shortcut.description || ""}
+        ${shortcut.keys.map(formatKey).join(" ")}
+        ${readableKeys}
+        ${compactKeys}
+    `)
 }
 
 function formatKey(key) {
