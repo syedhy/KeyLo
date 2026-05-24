@@ -3,23 +3,33 @@ import { onAuthStateChanged } from "firebase/auth"
 
 import { auth } from "../firebase/firebaseConfig"
 import { AuthContext } from "./authContextValue"
-import { ensureUserData } from "../firebase/authService"
+import { ensureUserData , handleRedirectLogin } from "../firebase/authService"
 
 export function AuthProvider({ children }) {
     const [user , setUser] = useState(null)
     const [authLoading , setAuthLoading] = useState(true)
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth , async (currentUser) => {
-            if (currentUser) {
-                await ensureUserData(currentUser)
+        async function initAuth() {
+            try {
+                await handleRedirectLogin()
+            } catch (error) {
+                console.error("Redirect login failed" , error)
             }
 
-            setUser(currentUser)
-            setAuthLoading(false)
-        })
+            const unsubscribe = onAuthStateChanged(auth , async (currentUser) => {
+                if (currentUser) {
+                    await ensureUserData(currentUser)
+                }
 
-        return unsubscribe
+                setUser(currentUser)
+                setAuthLoading(false)
+            })
+
+            return unsubscribe
+        }
+
+        initAuth()
     } , [])
 
     return (
