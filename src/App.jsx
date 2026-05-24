@@ -25,6 +25,7 @@ export default function App() {
                 setApps(firebaseApps)
             } catch (error) {
                 console.error("Failed to load user apps" , error)
+                setApps([])
             }
         }
 
@@ -32,6 +33,10 @@ export default function App() {
             loadApps()
         }
     } , [user , authLoading])
+
+    if (authLoading) {
+        return null
+    }
 
     return (
         <BrowserRouter>
