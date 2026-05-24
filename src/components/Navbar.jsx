@@ -10,7 +10,6 @@ export default function Navbar() {
             >
                 KeyLo
             </Link>
-
             <div className="hidden items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--surface)] px-2 py-2 shadow-sm md:flex">
                 <Link
                     to="/"
@@ -26,9 +25,12 @@ export default function Navbar() {
                     Apps
                 </Link>
 
-                <button className="rounded-full px-4 py-2 text-sm text-[var(--muted)] transition-colors hover:text-[var(--text)]">
-                    Keyboard
-                </button>
+                <Link
+                    to="/editor"
+                    className="rounded-full px-4 py-2 text-sm text-[var(--muted)] transition-colors hover:text-[var(--text)]"
+                >
+                    Editor
+                </Link>
             </div>
 
             <button className="hidden rounded-full bg-[var(--text)] px-5 py-2.5 text-sm font-medium text-[var(--surface)] transition-colors hover:bg-[var(--accent-dark)] md:block">

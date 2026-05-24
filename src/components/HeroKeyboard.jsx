@@ -28,7 +28,7 @@ const rows = [
     ]
 ]
 
-export default function HeroKeyboard({ activeKeys = [] }) {
+export default function HeroKeyboard({ activeKeys = [] , onKeyClick }) {
     return (
         <div className="mx-auto mt-10 max-w-6xl">
             <div className="rounded-[2rem] border border-[#2a2a24] bg-[#171914] p-4 shadow-[0_30px_80px_rgba(0,0,0,0.28)] md:p-7">
@@ -42,13 +42,12 @@ export default function HeroKeyboard({ activeKeys = [] }) {
                                 return (
                                     <button
                                         key={`${keyId}-${keyIndex}`}
-                                        className={`h-12 rounded-xl border text-sm font-medium transition-all duration-200 md:h-16 ${
-                                            getKeyWidth(key.wide)
-                                        } ${
-                                            isActive
+                                        onClick={() => onKeyClick?.(keyId)}
+                                        className={`h-12 rounded-xl border text-sm font-medium transition-all duration-200 md:h-16 ${getKeyWidth(key.wide)
+                                            } ${isActive
                                                 ? "border-[#9fbd88] bg-[#9fbd88] text-[#11140f] shadow-[0_0_30px_rgba(159,189,136,0.45)] -translate-y-1"
                                                 : "border-[#34372e] bg-[#22251d] text-[#d8d2c2] shadow-[inset_0_-4px_0_rgba(0,0,0,0.25)] hover:bg-[#2b2f25]"
-                                        }`}
+                                            }`}
                                     >
                                         {key.label}
                                     </button>

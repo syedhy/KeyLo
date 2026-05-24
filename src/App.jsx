@@ -3,6 +3,7 @@ import { BrowserRouter , Routes , Route } from "react-router-dom"
 import Home from "./pages/Home"
 import Apps from "./pages/Apps"
 import AppShortcuts from "./pages/AppShortcuts"
+import Editor from "./pages/Editor"
 
 export default function App() {
     return (
@@ -11,6 +12,7 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/apps" element={<Apps />} />
                 <Route path="/apps/:appId" element={<AppShortcuts />} />
+                <Route path="/editor" element={<Editor />} />
             </Routes>
         </BrowserRouter>
     )
