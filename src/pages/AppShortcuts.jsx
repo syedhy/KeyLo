@@ -6,9 +6,7 @@ import HeroKeyboard from "../components/HeroKeyboard"
 import ShortcutModal from "../components/ShortcutModal"
 import CommandSearch from "../components/CommandSearch"
 
-import { apps } from "../data/sampleApps"
-
-export default function AppShortcuts() {
+export default function AppShortcuts({ apps }) {
     const { appId } = useParams()
 
     const app =

@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom"
-
 import Navbar from "../components/Navbar"
-import { apps } from "../data/sampleApps"
 
-export default function Apps() {
+export default function Apps({ apps }) {
     return (
         <main className="min-h-screen bg-[var(--bg)]">
             <Navbar />

@@ -5,9 +5,7 @@ import HeroKeyboard from "../components/HeroKeyboard"
 import ShortcutModal from "../components/ShortcutModal"
 import CommandSearch from "../components/CommandSearch"
 
-import { apps } from "../data/sampleApps"
-
-export default function Home() {
+export default function Home({ apps }) {
     const [selectedKeys , setSelectedKeys] = useState([])
     const [search , setSearch] = useState("")
     const [hoveredShortcut , setHoveredShortcut] = useState(null)
