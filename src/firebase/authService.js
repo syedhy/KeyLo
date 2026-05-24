@@ -1,6 +1,7 @@
 import {
     GoogleAuthProvider ,
     getRedirectResult ,
+    signInWithPopup ,
     signInWithRedirect ,
     signOut
 } from "firebase/auth"
@@ -27,7 +28,20 @@ const defaultApps = [
 const provider = new GoogleAuthProvider()
 
 export async function loginWithGoogle() {
-    await signInWithRedirect(auth , provider)
+    try {
+        const result = await signInWithPopup(auth , provider)
+
+        await createUserIfNeeded(result.user)
+
+        return result.user
+    } catch (error) {
+        if (error.code === "auth/popup-blocked") {
+            await signInWithRedirect(auth , provider)
+            return
+        }
+
+        console.error("Google login failed" , error)
+    }
 }
 
 export async function handleRedirectLogin() {
