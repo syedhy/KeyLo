@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect , useState } from "react"
 import { BrowserRouter , Routes , Route } from "react-router-dom"
 
 import Home from "./pages/Home"
@@ -6,10 +6,32 @@ import Apps from "./pages/Apps"
 import AppShortcuts from "./pages/AppShortcuts"
 import Editor from "./pages/Editor"
 
-import { apps as sampleApps } from "./data/sampleApps"
+import { getUserApps } from "./firebase/shortcutService"
+import { useAuth } from "./context/useAuth"
 
 export default function App() {
-    const [apps , setApps] = useState(sampleApps)
+    const { user , authLoading } = useAuth()
+    const [apps , setApps] = useState([])
+
+    useEffect(() => {
+        async function loadApps() {
+            if (!user) {
+                setApps([])
+                return
+            }
+
+            try {
+                const firebaseApps = await getUserApps(user.uid)
+                setApps(firebaseApps)
+            } catch (error) {
+                console.error("Failed to load user apps" , error)
+            }
+        }
+
+        if (!authLoading) {
+            loadApps()
+        }
+    } , [user , authLoading])
 
     return (
         <BrowserRouter>

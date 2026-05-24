@@ -334,23 +334,8 @@ function getSearchText(shortcut) {
         ${compactKeys}
     `)
 }
-
 function formatKey(key) {
     return normalizeKey(key)
-}
-function normalizeKey(key) {
-    const labels = {
-        CmdLeft : "Cmd" ,
-        CmdRight : "Cmd" ,
-        OptionLeft : "Option" ,
-        OptionRight : "Option" ,
-        ShiftLeft : "Shift" ,
-        ShiftRight : "Shift" ,
-        ControlLeft : "Ctrl" ,
-        ControlRight : "Ctrl"
-    }
-
-    return labels[key] || key
 }
 
 function formatShortcut(keys) {
@@ -377,4 +362,18 @@ function sortShortcutKeys(keys) {
 
         return a.localeCompare(b)
     })
+}
+function normalizeKey(key) {
+    const labels = {
+        CmdLeft : "Cmd" ,
+        CmdRight : "Cmd" ,
+        OptionLeft : "Option" ,
+        OptionRight : "Option" ,
+        ShiftLeft : "Shift" ,
+        ShiftRight : "Shift" ,
+        ControlLeft : "Ctrl" ,
+        ControlRight : "Ctrl"
+    }
+
+    return labels[key] || key
 }

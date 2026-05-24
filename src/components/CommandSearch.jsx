@@ -1,8 +1,9 @@
-import { useEffect , useMemo , useState } from "react"
+import { useEffect , useMemo , useRef , useState } from "react"
 
 export default function CommandSearch({ shortcuts , onSelect }) {
     const [open , setOpen] = useState(false)
     const [query , setQuery] = useState("")
+    const inputRef = useRef(null)
 
     useEffect(() => {
         function handleKeyDown(e) {
@@ -22,6 +23,14 @@ export default function CommandSearch({ shortcuts , onSelect }) {
             window.removeEventListener("keydown" , handleKeyDown)
         }
     } , [])
+
+    useEffect(() => {
+        if (open) {
+            setTimeout(() => {
+                inputRef.current?.focus()
+            } , 0)
+        }
+    } , [open])
 
     const results = useMemo(() => {
         const queryWords = normalizeSearch(query)
@@ -49,7 +58,8 @@ export default function CommandSearch({ shortcuts , onSelect }) {
                 className="w-full max-w-2xl overflow-hidden rounded-4xl border border-(--border) bg-(--surface) shadow-(--shadow)"
             >
                 <input
-                    autoFocuS
+                    ref={inputRef}
+                    autoFocus
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search cmd p , new f , vs code cmd shift e..."
