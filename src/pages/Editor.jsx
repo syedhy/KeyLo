@@ -130,7 +130,7 @@ export default function Editor({ apps , setApps }) {
                             Apps
                         </h2>
 
-                        <div className="editor-app-list mt-4 grid max-h-80 gap-2 overflow-y-auto pr-1 sm:grid-cols-2 lg:max-h-[42vh] lg:max-h-[42dvh] lg:grid-cols-1">
+                        <div className="editor-app-list mt-4 grid max-h-80 gap-2 overflow-y-auto pr-1 sm:grid-cols-2 lg:max-h-[42vh] lg:grid-cols-1">
                             {apps.map((app) => (
                                 <button
                                     type="button"
