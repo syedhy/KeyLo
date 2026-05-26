@@ -1,5 +1,11 @@
 import { useEffect , useMemo , useRef , useState } from "react"
 
+import {
+    formatShortcut ,
+    getQueryWords ,
+    matchesShortcutSearch
+} from "../utils/shortcuts"
+
 export default function CommandSearch({ shortcuts , onSelect }) {
     const [open , setOpen] = useState(false)
     const [query , setQuery] = useState("")
@@ -33,9 +39,7 @@ export default function CommandSearch({ shortcuts , onSelect }) {
     } , [open])
 
     const results = useMemo(() => {
-        const queryWords = normalizeSearch(query)
-            .split(" ")
-            .filter(Boolean)
+        const queryWords = getQueryWords(query)
 
         if (queryWords.length === 0) {
             return shortcuts.slice(0 , 8)
@@ -51,11 +55,11 @@ export default function CommandSearch({ shortcuts , onSelect }) {
     return (
         <div
             onClick={() => setOpen(false)}
-            className="fixed inset-0 z-50 flex items-start justify-center bg-black/55 px-4 pt-24 backdrop-blur-xl"
+            className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/55 px-4 py-4 backdrop-blur-xl sm:pt-24"
         >
             <div
                 onClick={(e) => e.stopPropagation()}
-                className="w-full max-w-2xl overflow-hidden rounded-4xl border border-(--border) bg-(--surface) shadow-(--shadow)"
+                className="max-h-[calc(100vh_-_2rem)] max-h-[calc(100dvh_-_2rem)] w-full max-w-2xl overflow-hidden rounded-[2rem] border border-(--border) bg-(--surface) shadow-(--shadow)"
             >
                 <input
                     ref={inputRef}
@@ -63,12 +67,13 @@ export default function CommandSearch({ shortcuts , onSelect }) {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search cmd p , new f , vs code cmd shift e..."
-                    className="w-full border-b border-(--border) bg-transparent px-6 py-5 text-lg text-(--text) outline-none placeholder:text-(--muted)"
+                    className="w-full border-b border-(--border) bg-transparent px-5 py-4 text-base text-(--text) outline-none placeholder:text-(--muted) sm:px-6 sm:py-5 sm:text-lg"
                 />
 
-                <div className="max-h-105 overflow-y-auto p-3">
+                <div className="max-h-[calc(100vh_-_10rem)] max-h-[calc(100dvh_-_10rem)] overflow-y-auto p-3">
                     {results.map((shortcut) => (
                         <button
+                            type="button"
                             key={`${shortcut.app}-${shortcut.title}`}
                             onClick={() => {
                                 onSelect(shortcut)
@@ -77,8 +82,8 @@ export default function CommandSearch({ shortcuts , onSelect }) {
                             }}
                             className="w-full rounded-2xl p-4 text-left transition-colors hover:bg-(--surface-soft)"
                         >
-                            <div className="flex items-center justify-between gap-4">
-                                <div>
+                            <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                                <div className="min-w-0">
                                     <p className="text-xs text-(--muted)">
                                         {shortcut.app}
                                     </p>
@@ -87,12 +92,12 @@ export default function CommandSearch({ shortcuts , onSelect }) {
                                         {shortcut.title}
                                     </p>
 
-                                    <p className="mt-1 text-xs text-(--muted)">
+                                    <p className="mt-1 break-words text-xs text-(--muted)">
                                         {shortcut.description || "No description added yet"}
                                     </p>
                                 </div>
 
-                                <p className="shrink-0 text-sm text-(--accent)">
+                                <p className="break-words text-sm text-(--accent) sm:shrink-0 sm:text-right">
                                     {formatShortcut(shortcut.keys)}
                                 </p>
                             </div>
@@ -108,80 +113,4 @@ export default function CommandSearch({ shortcuts , onSelect }) {
             </div>
         </div>
     )
-}
-
-function matchesShortcutSearch(shortcut , queryWords) {
-    const searchableText = getSearchText(shortcut)
-
-    const modifierWords = ["cmd" , "shift" , "ctrl" , "control" , "option" , "alt"]
-
-    const queryHasModifier =
-        queryWords.some((word) => modifierWords.includes(word))
-
-    const shortcutWords = formatShortcut(shortcut.keys)
-        .toLowerCase()
-        .replaceAll("command" , "cmd")
-        .replaceAll("control" , "ctrl")
-        .replaceAll("option" , "alt")
-        .replaceAll("+" , " ")
-        .split(" ")
-        .filter(Boolean)
-
-    return queryWords.every((word) => {
-        if (modifierWords.includes(word)) {
-            return shortcutWords.includes(word)
-        }
-
-        if (queryHasModifier && word.length === 1) {
-            return shortcutWords.includes(word)
-        }
-
-        return searchableText.includes(word)
-    })
-}
-
-function normalizeSearch(text) {
-    return text
-        .toLowerCase()
-        .replaceAll("command" , "cmd")
-        .replaceAll("control" , "ctrl")
-        .replaceAll("option" , "alt")
-        .replaceAll("+" , " ")
-        .replaceAll("-" , " ")
-        .replaceAll("," , " ")
-        .replace(/\s+/g , " ")
-        .trim()
-}
-
-function getSearchText(shortcut) {
-    const readableKeys = formatShortcut(shortcut.keys)
-    const compactKeys = readableKeys.replaceAll(" + " , " ")
-
-    return normalizeSearch(`
-        ${shortcut.app}
-        ${shortcut.title}
-        ${shortcut.description || ""}
-        ${shortcut.keys.map(formatKey).join(" ")}
-        ${readableKeys}
-        ${compactKeys}
-    `)
-}
-
-function formatKey(key) {
-    const labels = {
-        CmdLeft : "Cmd" ,
-        CmdRight : "Cmd" ,
-        OptionLeft : "Option" ,
-        OptionRight : "Option" ,
-        ShiftLeft : "Shift" ,
-        ShiftRight : "Shift" ,
-        ControlLeft : "Control" ,
-        ControlRight : "Control"
-    }
-
-    return labels[key] || key
-}
-
-function formatShortcut(keys) {
-    return keys.map(formatKey).join(" + ")
 }

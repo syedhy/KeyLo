@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 :root {
+    --nav-height: 96px;
+
     --bg: #0b0d12;
 
     --surface: rgba(18 , 20 , 26 , 0.78);
@@ -30,7 +32,14 @@ body,
     margin: 0;
 }
 
+html {
+    min-width: 0;
+}
+
 body {
+    min-width: 0;
+    overflow-x: hidden;
+
     font-family:
         "SF Pro Display" ,
         Inter ,
@@ -87,6 +96,7 @@ button {
 input,
 textarea,
 select {
+    max-width: 100%;
     color: var(--text);
 }
 
@@ -117,4 +127,357 @@ textarea::placeholder {
 
 .no-scrollbar::-webkit-scrollbar {
     display: none;
+}
+
+.home-page {
+    --home-gap: clamp(0.9rem , 1.8vh , 1.5rem);
+}
+
+.home-landing {
+    display: flex;
+    flex-direction: column;
+    gap: var(--home-gap);
+}
+
+.home-filter,
+.home-current,
+.home-results {
+    margin: 0;
+}
+
+.home-feature-grid {
+    gap: var(--home-gap);
+}
+
+@media (min-width: 1024px) and (min-height: 860px) {
+    .home-page {
+        --home-gap: clamp(1.1rem , 2vh , 1.75rem);
+    }
+}
+
+@media (min-width: 1024px) and (max-height: 760px) {
+    .home-page {
+        --home-gap: 0.8rem;
+        padding-block: 1rem;
+    }
+
+    .home-heading-row {
+        gap: 0.75rem;
+    }
+
+    .home-heading-row h1 {
+        font-size: 2rem;
+        line-height: 1.15;
+    }
+
+    .home-heading-row p {
+        margin-top: 0.35rem;
+        line-height: 1.45;
+    }
+
+    .home-filter {
+        padding-bottom: 0;
+    }
+
+    .home-current {
+        min-height: 2rem;
+    }
+
+    .home-preview-panel {
+        min-height: 13.5rem;
+        padding: 1.25rem;
+    }
+
+    .home-result-grid {
+        gap: 0.75rem;
+    }
+
+    .home-result-grid > button {
+        padding: 1rem;
+    }
+}
+
+@media (min-width: 1024px) and (max-height: 700px) {
+    .home-page {
+        --home-gap: 0.65rem;
+        padding-block: 0.75rem;
+    }
+
+    .home-heading-row h1 {
+        font-size: 1.85rem;
+    }
+
+    .home-heading-row input {
+        padding-block: 0.65rem;
+    }
+
+    .home-preview-panel {
+        min-height: 12rem;
+        padding: 1rem;
+    }
+
+    .home-preview-panel h2 {
+        font-size: 1.35rem;
+    }
+
+    .home-preview-panel p {
+        line-height: 1.55;
+    }
+
+    .home-result-grid > button {
+        padding: 0.85rem;
+    }
+
+    .home-result-grid > button p {
+        margin-top: 0.4rem;
+    }
+
+    .home-result-grid > button p:first-child {
+        margin-top: 0;
+    }
+}
+
+@media (min-width: 1024px) and (max-height: 600px) {
+    .home-page {
+        --home-gap: 0.5rem;
+        padding-block: 0.5rem;
+    }
+
+    .home-heading-row h1 {
+        font-size: 1.75rem;
+    }
+
+    .home-heading-row input {
+        padding-block: 0.55rem;
+    }
+
+    .home-current {
+        min-height: 1.5rem;
+    }
+
+    .home-preview-panel {
+        min-height: 10.5rem;
+        padding: 0.85rem;
+    }
+
+    .home-preview-panel h2 {
+        margin-top: 0.4rem;
+        font-size: 1.2rem;
+    }
+
+    .home-preview-panel p {
+        margin-top: 0.4rem;
+    }
+
+    .home-result-grid > button {
+        padding: 0.7rem 0.85rem;
+    }
+}
+
+.detail-page,
+.builder-page,
+.editor-page {
+    --page-gap: clamp(0.85rem , 1.6vh , 1.4rem);
+}
+
+.detail-landing,
+.builder-landing,
+.editor-landing {
+    display: flex;
+    flex-direction: column;
+    gap: var(--page-gap);
+}
+
+.detail-results,
+.builder-current,
+.builder-results {
+    margin: 0;
+}
+
+.detail-result-grid,
+.builder-result-grid,
+.detail-feature-grid {
+    gap: var(--page-gap);
+}
+
+.home-feature-grid .keyboard-viewport,
+.detail-feature-grid .keyboard-viewport,
+.builder-landing > .keyboard-viewport {
+    margin-block-start: 0;
+}
+
+@media (min-width: 1024px) and (min-height: 860px) {
+    .detail-page,
+    .builder-page,
+    .editor-page {
+        --page-gap: clamp(1rem , 1.9vh , 1.65rem);
+    }
+}
+
+@media (min-width: 1024px) and (max-height: 760px) {
+    .detail-page,
+    .builder-page,
+    .editor-page {
+        --page-gap: 0.8rem;
+        padding-block: 1rem;
+    }
+
+    .detail-heading-row,
+    .builder-heading-row {
+        gap: 0.75rem;
+    }
+
+    .detail-heading-row h1,
+    .builder-heading-row h1 {
+        font-size: 2rem;
+        line-height: 1.15;
+    }
+
+    .detail-heading-row p,
+    .builder-heading-row p {
+        margin-top: 0.35rem;
+        line-height: 1.45;
+    }
+
+    .detail-heading-row input {
+        padding-block: 0.75rem;
+    }
+
+    .detail-preview-panel {
+        min-height: 13.5rem;
+        padding: 1.25rem;
+    }
+
+    .detail-result-grid > button,
+    .builder-result-grid > div {
+        padding: 1rem;
+    }
+
+    .editor-landing {
+        --page-gap: 0.75rem;
+    }
+
+    .editor-heading h1 {
+        font-size: 1.65rem;
+    }
+
+    .editor-heading p {
+        margin-top: 0.25rem;
+    }
+
+    .editor-layout,
+    .editor-main {
+        gap: 0.75rem;
+    }
+
+    .editor-sidebar,
+    .editor-form-card {
+        padding: 0.85rem;
+    }
+
+    .editor-app-list {
+        margin-top: 0.75rem;
+        max-height: 32vh;
+        max-height: 32dvh;
+    }
+
+    .editor-keyboard-wrap {
+        margin-top: 0.75rem;
+    }
+
+    .editor-manage-header {
+        margin-bottom: 0.75rem;
+        padding: 1rem;
+    }
+
+    .editor-shortcut-list {
+        padding: 0.5rem;
+    }
+}
+
+@media (min-width: 1024px) and (max-height: 660px) {
+    .detail-page,
+    .builder-page,
+    .editor-page {
+        --page-gap: 0.65rem;
+        padding-block: 0.75rem;
+    }
+
+    .detail-heading-row h1,
+    .builder-heading-row h1 {
+        font-size: 1.85rem;
+    }
+
+    .detail-heading-row input {
+        padding-block: 0.65rem;
+    }
+
+    .detail-preview-panel {
+        min-height: 12rem;
+        padding: 1rem;
+    }
+
+    .detail-preview-panel h2 {
+        font-size: 1.25rem;
+    }
+
+    .detail-result-grid > button,
+    .builder-result-grid > div {
+        padding: 0.85rem;
+    }
+
+    .editor-sidebar,
+    .editor-form-card {
+        padding: 0.7rem;
+    }
+
+    .editor-form-card input {
+        padding-block: 0.55rem;
+    }
+
+    .editor-selected-row {
+        margin-top: 0.3rem;
+    }
+
+    .editor-form-card > button {
+        margin-top: 0.55rem;
+        padding-block: 0.55rem;
+    }
+
+    .editor-manage-header {
+        padding: 0.85rem 1rem;
+    }
+}
+
+@media (min-width: 1024px) and (max-height: 560px) {
+    .detail-page,
+    .builder-page,
+    .editor-page {
+        --page-gap: 0.5rem;
+        padding-block: 0.5rem;
+    }
+
+    .detail-heading-row h1,
+    .builder-heading-row h1 {
+        font-size: 1.75rem;
+    }
+
+    .detail-preview-panel {
+        min-height: 10.5rem;
+        padding: 0.85rem;
+    }
+
+    .detail-result-grid > button,
+    .builder-result-grid > div {
+        padding: 0.7rem 0.85rem;
+    }
+
+    .editor-heading h1 {
+        font-size: 1.5rem;
+    }
+
+    .editor-app-list {
+        max-height: 24vh;
+        max-height: 24dvh;
+    }
 }

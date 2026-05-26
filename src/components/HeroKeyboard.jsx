@@ -55,7 +55,12 @@ const bottomLeftKeys = [
     { label: "option", id: "OptionRight", sub: "⌥" }
 ]
 
-export default function HeroKeyboard({ activeKeys = [], onKeyClick }) {
+export default function HeroKeyboard({
+    activeKeys = [] ,
+    compact = false ,
+    density = "default" ,
+    onKeyClick
+}) {
     const [tilt, setTilt] = useState({
         x: 0,
         y: 0
@@ -86,11 +91,22 @@ export default function HeroKeyboard({ activeKeys = [], onKeyClick }) {
         })
     }
 
+    const densityClass =
+        compact || density === "compact"
+            ? "keyboard-viewport--compact"
+            : density === "home"
+                ? "keyboard-viewport--home"
+                : density === "detail"
+                    ? "keyboard-viewport--detail"
+                    : density === "editor"
+                        ? "keyboard-viewport--editor"
+                        : ""
+
     return (
         <div
             onMouseMove={handleMouseMove}
             onMouseLeave={resetTilt}
-            className="mt-4 perspective-[1800px]"
+            className={`keyboard-viewport ${densityClass}`}
         >
             <div
                 style={{
@@ -98,7 +114,7 @@ export default function HeroKeyboard({ activeKeys = [], onKeyClick }) {
                 }}
                 className="keyboard-shell transition-transform duration-150 ease-out"
             >
-                <div className="keyboard-content space-y-1.5">
+                <div className="keyboard-content">
                     {rows.map((row, rowIndex) => (
                         <div
                             key={rowIndex}
@@ -116,41 +132,41 @@ export default function HeroKeyboard({ activeKeys = [], onKeyClick }) {
                     ))}
 
                     <div className="keyboard-row">
-    {bottomLeftKeys.map((item , keyIndex) => (
-        <KeyboardKey
-            key={`${item.label}-${keyIndex}`}
-            item={item}
-            activeKeys={activeKeys}
-            onKeyClick={onKeyClick}
-        />
-    ))}
+                        {bottomLeftKeys.map((item , keyIndex) => (
+                            <KeyboardKey
+                                key={`${item.label}-${keyIndex}`}
+                                item={item}
+                                activeKeys={activeKeys}
+                                onKeyClick={onKeyClick}
+                            />
+                        ))}
 
-    <KeyboardKey
-        item={{ label : "◀" , wide : "arrow" }}
-        activeKeys={activeKeys}
-        onKeyClick={onKeyClick}
-    />
+                        <KeyboardKey
+                            item={{ label : "◀" , wide : "arrow" }}
+                            activeKeys={activeKeys}
+                            onKeyClick={onKeyClick}
+                        />
 
-    <div className="flex w-[44px] flex-col justify-between">
-        <KeyboardKey
-            item={{ label : "▲" , wide : "arrowHalf" }}
-            activeKeys={activeKeys}
-            onKeyClick={onKeyClick}
-        />
+                        <div className="keyboard-arrow-stack">
+                            <KeyboardKey
+                                item={{ label : "▲" , wide : "arrowHalf" }}
+                                activeKeys={activeKeys}
+                                onKeyClick={onKeyClick}
+                            />
 
-        <KeyboardKey
-            item={{ label : "▼" , wide : "arrowHalf" }}
-            activeKeys={activeKeys}
-            onKeyClick={onKeyClick}
-        />
-    </div>
+                            <KeyboardKey
+                                item={{ label : "▼" , wide : "arrowHalf" }}
+                                activeKeys={activeKeys}
+                                onKeyClick={onKeyClick}
+                            />
+                        </div>
 
-    <KeyboardKey
-        item={{ label : "▶" , wide : "arrow" }}
-        activeKeys={activeKeys}
-        onKeyClick={onKeyClick}
-    />
-</div>
+                        <KeyboardKey
+                            item={{ label : "▶" , wide : "arrow" }}
+                            activeKeys={activeKeys}
+                            onKeyClick={onKeyClick}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -160,15 +176,19 @@ export default function HeroKeyboard({ activeKeys = [], onKeyClick }) {
 function KeyboardKey({ item, activeKeys, onKeyClick }) {
     const keyId = item.id || item.label
 
-const isActive =
-    activeKeys.includes(keyId) ||
-    activeKeys.includes(item.label)
+    const isActive =
+        activeKeys.includes(keyId) ||
+        activeKeys.includes(item.label)
 
     return (
         <button
+            type="button"
             onClick={() => onKeyClick?.(keyId)}
-            className={`keyboard-key ${getKeyHeight(item.wide)} ${getKeyWidth(item.wide)} ${isActive ? "is-active" : ""
-                }`}
+            className={`keyboard-key ${isActive ? "is-active" : ""}`}
+            style={{
+                "--key-width" : getKeyWidth(item.wide) ,
+                "--key-height-ratio" : getKeyHeight(item.wide)
+            }}
         >
             <span className="keyboard-key-face" />
             <span className="keyboard-key-shine" />
@@ -189,26 +209,26 @@ const isActive =
 }
 
 function getKeyHeight(type) {
-    if (type === "arrowHalf") return "h-[22px]"
+    if (type === "arrowHalf") return 0.46
 
-    return "h-[48px]"
+    return 1
 }
 
 function getKeyWidth(type) {
-    if (type === "delete") return "w-[67px]"
-    if (type === "tab") return "w-[66px]"
-    if (type === "caps") return "w-[92px]"
-    if (type === "return") return "w-[80px]"
-    if (type === "shiftLeft") return "w-[112px]"
-    if (type === "shiftRight") return "w-[116px]"
+    const widths = {
+        delete : 1.34 ,
+        tab : 1.32 ,
+        caps : 1.84 ,
+        return : 1.6 ,
+        shiftLeft : 2.24 ,
+        shiftRight : 2.32 ,
+        cmd : 1.14 ,
+        space : 5.86 ,
+        arrow : 0.88 ,
+        arrowHalf : 0.88
+    }
 
-    if (type === "cmd") return "w-[57px]"
-    if (type === "space") return "w-[293px]"
-
-    if (type === "arrow") return "w-[44px]"
-    if (type === "arrowHalf") return "w-[44px]"
-
-    return "w-[50px]"
+    return widths[type] || 1
 }
 
 function getLabelClass(item) {

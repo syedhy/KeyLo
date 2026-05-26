@@ -1,20 +1,22 @@
+import { formatShortcut } from "../utils/shortcuts"
+
 export default function ShortcutModal({ shortcut , onClose }) {
     if (!shortcut) return null
 
     return (
         <div
             onClick={onClose}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/40 px-4 py-6 backdrop-blur-md"
         >
             <div
                 onClick={(e) => e.stopPropagation()}
-                className="w-full max-w-lg rounded-4xl border border-(--border) bg-(--surface) p-7 shadow-(--shadow)"
+                className="max-h-[calc(100vh_-_2rem)] max-h-[calc(100dvh_-_2rem)] w-full max-w-lg overflow-y-auto rounded-[2rem] border border-(--border) bg-(--surface) p-5 shadow-(--shadow) sm:p-7"
             >
                 <p className="text-sm text-(--muted)">
                     {shortcut.app}
                 </p>
 
-                <h2 className="mt-2 text-3xl font-semibold text-(--text)">
+                <h2 className="mt-2 break-words text-2xl font-semibold text-(--text) sm:text-3xl">
                     {shortcut.title}
                 </h2>
 
@@ -27,7 +29,7 @@ export default function ShortcutModal({ shortcut , onClose }) {
                         Shortcut
                     </p>
 
-                    <p className="mt-2 text-lg font-semibold text-(--accent-dark)">
+                    <p className="mt-2 break-words text-base font-semibold text-(--accent-dark) sm:text-lg">
                         {formatShortcut(shortcut.keys)}
                     </p>
                 </div>
@@ -41,23 +43,4 @@ export default function ShortcutModal({ shortcut , onClose }) {
             </div>
         </div>
     )
-}
-
-function formatKey(key) {
-    const labels = {
-        CmdLeft : "Cmd" ,
-        CmdRight : "Cmd" ,
-        OptionLeft : "Option" ,
-        OptionRight : "Option" ,
-        ShiftLeft : "Shift" ,
-        ShiftRight : "Shift" ,
-        ControlLeft : "Control" ,
-        ControlRight : "Control"
-    }
-
-    return labels[key] || key
-}
-
-function formatShortcut(keys) {
-    return keys.map(formatKey).join(" + ")
 }

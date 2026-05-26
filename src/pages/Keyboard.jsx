@@ -1,21 +1,18 @@
 import { useMemo , useState } from "react"
 
-import Navbar from "../components/Navbar"
 import HeroKeyboard from "../components/HeroKeyboard"
-import { apps } from "../data/sampleApps"
+import PageShell from "../components/PageShell"
+import {
+    formatKey ,
+    formatShortcut ,
+    getShortcutsFromApps ,
+    sortShortcutKeys
+} from "../utils/shortcuts"
 
-export default function Keyboard() {
+export default function Keyboard({ apps = [] }) {
     const [selectedKeys , setSelectedKeys] = useState([])
 
-    const allShortcuts = useMemo(() => {
-        return apps.flatMap((app) =>
-            app.shortcuts.map((shortcut) => ({
-                ...shortcut ,
-                app : app.name ,
-                appId : app.id
-            }))
-        )
-    } , [])
+    const allShortcuts = useMemo(() => getShortcutsFromApps(apps) , [apps])
 
     const matchingShortcuts = useMemo(() => {
         if (selectedKeys.length === 0) {
@@ -42,58 +39,56 @@ export default function Keyboard() {
     }
 
     return (
-        <main className="h-screen overflow-hidden bg-(--bg)">
-            <Navbar />
+        <PageShell centerContent className="builder-page">
+            <div className="builder-landing w-full lg:my-auto">
+                <div className="builder-heading-row flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                    <div>
+                        <h1 className="text-3xl font-semibold text-(--text) sm:text-4xl">
+                            Shortcut Builder
+                        </h1>
 
-            <section className="mx-auto flex h-[calc(100vh-88px)] max-w-7xl flex-col px-6 pb-6">
-                <div className="shrink-0 pt-4">
-                    <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                        <div>
-                            <h1 className="text-4xl font-semibold text-(--text)">
-                                Shortcut Builder
-                            </h1>
-
-                            <p className="mt-2 text-(--muted)">
-                                Click keys to build a shortcut and find matching commands
-                            </p>
-                        </div>
-
-                        <button
-                            onClick={clearKeys}
-                            className="w-fit rounded-full border border-(--border) bg-(--surface) px-5 py-3 text-sm text-(--text) transition-colors hover:bg-(--surface-soft)"
-                        >
-                            Clear keys
-                        </button>
+                        <p className="mt-2 text-sm text-(--muted) sm:text-base">
+                            Click keys to build a shortcut and find matching commands
+                        </p>
                     </div>
 
-                    <HeroKeyboard
-                        activeKeys={selectedKeys}
-                        onKeyClick={handleKeyClick}
-                    />
-
-                    <div className="mt-5 flex flex-wrap items-center gap-2">
-                        <span className="text-sm text-(--muted)">
-                            Current shortcut :
-                        </span>
-
-                        {selectedKeys.length === 0 ? (
-                            <span className="text-sm text-(--muted)">
-                                No keys selected
-                            </span>
-                        ) : (
-                            sortShortcutKeys(selectedKeys).map((key) => (
-                                <span
-                                    key={key}
-                                    className="rounded-full bg-(--surface) px-3 py-1 text-sm text-(--accent-dark)"
-                                >
-                                    {formatKey(key)}
-                                </span>
-                            ))
-                        )}
-                    </div>
+                    <button
+                        type="button"
+                        onClick={clearKeys}
+                        className="w-fit rounded-full border border-(--border) bg-(--surface) px-5 py-3 text-sm text-(--text) transition-colors hover:bg-(--surface-soft)"
+                    >
+                        Clear keys
+                    </button>
                 </div>
 
-                <div className="mt-6 min-h-0 flex-1 overflow-y-auto pr-2">
+                <HeroKeyboard
+                    activeKeys={selectedKeys}
+                    density="detail"
+                    onKeyClick={handleKeyClick}
+                />
+
+                <div className="builder-current flex flex-wrap items-center gap-2">
+                    <span className="text-sm text-(--muted)">
+                        Current shortcut :
+                    </span>
+
+                    {selectedKeys.length === 0 ? (
+                        <span className="text-sm text-(--muted)">
+                            No keys selected
+                        </span>
+                    ) : (
+                        sortShortcutKeys(selectedKeys).map((key) => (
+                            <span
+                                key={key}
+                                className="rounded-full bg-(--surface) px-3 py-1 text-sm text-(--accent-dark)"
+                            >
+                                {formatKey(key)}
+                            </span>
+                        ))
+                    )}
+                </div>
+
+                <div className="builder-results">
                     {selectedKeys.length === 0 && (
                         <p className="rounded-3xl border border-(--border) bg-(--surface) p-6 text-(--muted)">
                             Click keys on the keyboard to start searching
@@ -106,7 +101,7 @@ export default function Keyboard() {
                         </p>
                     )}
 
-                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <div className="builder-result-grid grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {matchingShortcuts.map((shortcut) => (
                             <div
                                 key={`${shortcut.app}-${shortcut.title}`}
@@ -116,59 +111,18 @@ export default function Keyboard() {
                                     {shortcut.app}
                                 </p>
 
-                                <p className="mt-1 text-sm font-semibold text-(--text)">
+                                <p className="mt-1 break-words text-sm font-semibold text-(--text)">
                                     {shortcut.title}
                                 </p>
 
-                                <p className="mt-3 text-sm text-(--accent-dark)">
+                                <p className="mt-3 break-words text-sm text-(--accent-dark)">
                                     {formatShortcut(shortcut.keys)}
                                 </p>
                             </div>
                         ))}
                     </div>
                 </div>
-            </section>
-        </main>
+            </div>
+        </PageShell>
     )
-}
-
-function formatKey(key) {
-    const labels = {
-        CmdLeft : "Cmd" ,
-        CmdRight : "Cmd" ,
-        OptionLeft : "Option" ,
-        OptionRight : "Option" ,
-        ShiftLeft : "Shift" ,
-        ShiftRight : "Shift" ,
-        ControlLeft : "Control" ,
-        ControlRight : "Control"
-    }
-
-    return labels[key] || key
-}
-
-function formatShortcut(keys) {
-    return sortShortcutKeys(keys).map(formatKey).join(" + ")
-}
-
-function sortShortcutKeys(keys) {
-    const order = {
-        ControlLeft : 1 ,
-        ControlRight : 1 ,
-        OptionLeft : 2 ,
-        OptionRight : 2 ,
-        CmdLeft : 3 ,
-        CmdRight : 3 ,
-        ShiftLeft : 4 ,
-        ShiftRight : 4
-    }
-
-    return [...keys].sort((a , b) => {
-        const aOrder = order[a] || 10
-        const bOrder = order[b] || 10
-
-        if (aOrder !== bOrder) return aOrder - bOrder
-
-        return a.localeCompare(b)
-    })
 }

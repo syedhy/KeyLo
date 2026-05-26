@@ -1,10 +1,16 @@
 import { useMemo , useState } from "react"
 import { Link , useParams } from "react-router-dom"
 
-import Navbar from "../components/Navbar"
-import HeroKeyboard from "../components/HeroKeyboard"
-import ShortcutModal from "../components/ShortcutModal"
 import CommandSearch from "../components/CommandSearch"
+import HeroKeyboard from "../components/HeroKeyboard"
+import PageShell from "../components/PageShell"
+import ShortcutCard from "../components/ShortcutCard"
+import ShortcutModal from "../components/ShortcutModal"
+import {
+    formatShortcut ,
+    getQueryWords ,
+    matchesShortcutSearch
+} from "../utils/shortcuts"
 
 export default function AppShortcuts({ apps }) {
     const { appId } = useParams()
@@ -12,7 +18,9 @@ export default function AppShortcuts({ apps }) {
     const app = apps.find((item) => item.id === appId) || apps[0]
 
     const shortcuts = useMemo(() => {
-        return app.shortcuts.map((shortcut) => ({
+        if (!app) return []
+
+        return (app.shortcuts || []).map((shortcut) => ({
             ...shortcut ,
             app : app.name ,
             appId : app.id
@@ -24,89 +32,54 @@ export default function AppShortcuts({ apps }) {
     const [openedShortcut , setOpenedShortcut] = useState(null)
 
     const filteredShortcuts = useMemo(() => {
-        const queryWords = normalizeSearch(search).split(" ").filter(Boolean)
+        const queryWords = getQueryWords(search)
 
-        return shortcuts.filter((shortcut) => {
-
-            return (
-                queryWords.length === 0 ||
-                matchesShortcutSearch(shortcut, queryWords)
-            )
-        })
+        return shortcuts.filter((shortcut) =>
+            matchesShortcutSearch(shortcut , queryWords)
+        )
     } , [shortcuts , search])
 
     return (
-        <main className="h-screen overflow-hidden bg-(--bg)">
-            <Navbar />
+        <PageShell centerContent className="detail-page">
+            <div className="detail-landing w-full lg:my-auto">
+                <Link
+                    to="/apps"
+                    className="detail-back text-sm text-(--muted) transition hover:text-white"
+                >
+                    ← Back to apps
+                </Link>
 
-            <section className="mx-auto flex h-[calc(100vh-88px) max-w-7xl flex-col px-6 pb-6">
-                <div className="shrink-0 pt-4">
-                    <Link
-                        to="/apps"
-                        className="text-sm text-(--muted)"
-                    >
-                        ← Back to apps
-                    </Link>
+                <div className="detail-heading-row flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                    <div>
+                        <h1 className="break-words text-3xl font-semibold text-(--text) sm:text-4xl">
+                            {app?.name || "Shortcuts"}
+                        </h1>
 
-                    <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                        <div>
-                            <h1 className="text-4xl font-semibold text-(--text)">
-                                {app.name}
-                            </h1>
-
-                            <p className="mt-2 text-(--muted)">
-                                Search shortcuts and hover any card to highlight keys
-                            </p>
-                        </div>
-
-                        <input
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            placeholder="Search cmd p" 
-                            className="w-full rounded-full border border-(--border) bg-(--surface) px-5 py-3 text-sm outline-none md:w-80"
-                        />
+                        <p className="mt-2 text-sm text-(--muted) sm:text-base">
+                            Search shortcuts and hover any card to highlight keys
+                        </p>
                     </div>
 
-                    <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
-                        <HeroKeyboard
-                            activeKeys={selectedShortcut?.keys || []}
-                        />
+                    <input
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Search cmd p"
+                        className="w-full rounded-full border border-(--border) bg-(--surface) px-5 py-3 text-sm outline-none transition focus:border-white/20 md:max-w-sm"
+                    />
+                </div>
 
-                        <div className="mt-10 hidden rounded-4xl border border-(--border) bg-(--surface) p-5 lg:block">
-                            <p className="text-xs text-(--muted)">
-                                Preview
-                            </p>
+                <div className="detail-feature-grid grid items-stretch gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
+                    <HeroKeyboard
+                        activeKeys={selectedShortcut?.keys || []}
+                        density="detail"
+                    />
 
-                            {selectedShortcut ? (
-                                <>
-                                    <p className="mt-3 text-sm text-(--muted)">
-                                        {selectedShortcut.app}
-                                    </p>
-
-                                    <h2 className="mt-1 text-xl font-semibold text-(--text)">
-                                        {selectedShortcut.title}
-                                    </h2>
-
-                                    <p className="mt-3 text-sm leading-6 text-(--muted)">
-                                        {selectedShortcut.description || "No description added yet"}
-                                    </p>
-
-                                    <p className="mt-4 text-sm font-semibold text-(--accent-dark)">
-                                        {formatShortcut(selectedShortcut.keys)}
-                                    </p>
-                                </>
-                            ) : (
-                                <p className="mt-3 text-sm leading-6 text-(--muted)">
-                                    Hover a shortcut card to preview its details here
-                                </p>
-                            )}
-                        </div>
-                    </div>
+                    <PreviewPanel shortcut={selectedShortcut} />
                 </div>
 
                 <div
                     onMouseLeave={() => setSelectedShortcut(null)}
-                    className="mt-6 min-h-0 flex-1 overflow-y-auto pr-2"
+                    className="detail-results"
                 >
                     {filteredShortcuts.length === 0 && (
                         <p className="rounded-3xl border border-(--border) bg-(--surface) p-6 text-(--muted)">
@@ -114,34 +87,19 @@ export default function AppShortcuts({ apps }) {
                         </p>
                     )}
 
-                    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <div className="detail-result-grid grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {filteredShortcuts.map((shortcut) => (
-                            <button
+                            <ShortcutCard
                                 key={`${shortcut.app}-${shortcut.title}`}
-                                onMouseEnter={() => setSelectedShortcut(shortcut)}
-                                onClick={() => setOpenedShortcut(shortcut)}
-                                className="rounded-3xl border border-(--border) bg-(--surface) p-5 text-left transition-all hover:shadow-lg"
-                            >
-                                <p className="text-xs text-(--muted)">
-                                    {shortcut.app}
-                                </p>
-
-                                <p className="mt-1 text-sm font-semibold text-(--text)">
-                                    {shortcut.title}
-                                </p>
-
-                                <p className="mt-2 text-xs leading-5 text-(--muted)">
-                                    {shortcut.description || "No description added yet"}
-                                </p>
-
-                                <p className="mt-3 text-sm text-(--accent-dark)">
-                                    {formatShortcut(shortcut.keys)}
-                                </p>
-                            </button>
+                                shortcut={shortcut}
+                                onHover={setSelectedShortcut}
+                                onOpen={setOpenedShortcut}
+                                showDescription
+                            />
                         ))}
                     </div>
                 </div>
-            </section>
+            </div>
 
             <ShortcutModal
                 shortcut={openedShortcut}
@@ -152,96 +110,40 @@ export default function AppShortcuts({ apps }) {
                 shortcuts={shortcuts}
                 onSelect={setOpenedShortcut}
             />
-        </main>
+        </PageShell>
     )
 }
 
-function normalizeSearch(text) {
-    return text
-        .toLowerCase()
-        .replaceAll("command" , "cmd")
-        .replaceAll("control" , "ctrl")
-        .replaceAll("option" , "alt")
-        .replaceAll("+" , " ")
-        .replaceAll("-" , " ")
-        .replaceAll("," , " ")
-        .replaceAll(/\s+/g , " ")
-        .trim()
-}
+function PreviewPanel({ shortcut }) {
+    return (
+        <div className="detail-preview-panel hidden min-h-[15.5rem] rounded-[2rem] border border-(--border) bg-(--surface) p-5 lg:block">
+            <p className="text-xs text-(--muted)">
+                Preview
+            </p>
 
-function getSearchText(shortcut) {
-    const readableKeys = formatShortcut(shortcut.keys)
-    const compactKeys = readableKeys.replaceAll(" + " , " ")
+            {shortcut ? (
+                <>
+                    <p className="mt-3 break-words text-sm text-(--muted)">
+                        {shortcut.app}
+                    </p>
 
-    return normalizeSearch(`
-        ${shortcut.app}
-        ${shortcut.title}
-        ${shortcut.description || ""}
-        ${shortcut.keys.map(formatKey).join(" ")}
-        ${readableKeys}
-        ${compactKeys}
-    `)
-}
+                    <h2 className="mt-1 break-words text-xl font-semibold text-(--text)">
+                        {shortcut.title}
+                    </h2>
 
-function formatKey(key) {
-    const labels = {
-        CmdLeft : "Cmd" ,
-        CmdRight : "Cmd" ,
-        OptionLeft : "Option" ,
-        OptionRight : "Option" ,
-        ShiftLeft : "Shift" ,
-        ShiftRight : "Shift" ,
-        ControlLeft : "Control" ,
-        ControlRight : "Control"
-    }
+                    <p className="mt-3 break-words text-sm leading-6 text-(--muted)">
+                        {shortcut.description || "No description added yet"}
+                    </p>
 
-    return labels[key] || key
-}
-
-function formatShortcut(keys) {
-    return sortShortcutKeys(keys).map(formatKey).join(" + ")
-}
-
-function sortShortcutKeys(keys) {
-    const order = {
-        ControlLeft : 1 ,
-        ControlRight : 1 ,
-        OptionLeft : 2 ,
-        OptionRight : 2 ,
-        CmdLeft : 3 ,
-        CmdRight : 3 ,
-        ShiftLeft : 4 ,
-        ShiftRight : 4
-    }
-
-    return [...keys].sort((a , b) => {
-        const aOrder = order[a] || 10
-        const bOrder = order[b] || 10
-
-        if (aOrder !== bOrder) return aOrder - bOrder
-
-        return a.localeCompare(b)
-    })
-}
-function matchesShortcutSearch(shortcut , queryWords) {
-    const searchableText = getSearchText(shortcut)
-
-    const keyWords = ["cmd" , "shift" , "ctrl" , "control" , "option" , "alt"]
-
-    const shortcutWords = formatShortcut(shortcut.keys)
-        .toLowerCase()
-        .replaceAll("command" , "cmd")
-        .replaceAll("control" , "ctrl")
-        .replaceAll("option" , "alt")
-        .replaceAll("+" , " ")
-        .split(" ")
-        .filter(Boolean)
-
-    return queryWords.every((word) => {
-        if (keyWords.includes(word) || word.length === 1) {
-            return shortcutWords.includes(word)
-        }
-
-        return searchableText.includes(word)
-    })
+                    <p className="mt-4 break-words text-sm font-semibold text-(--accent-dark)">
+                        {formatShortcut(shortcut.keys)}
+                    </p>
+                </>
+            ) : (
+                <p className="mt-3 text-sm leading-6 text-(--muted)">
+                    Hover a shortcut card to preview its details here
+                </p>
+            )}
+        </div>
+    )
 }

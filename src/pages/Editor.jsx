@@ -1,10 +1,11 @@
 import { useMemo , useState } from "react"
 
-import Navbar from "../components/Navbar"
 import HeroKeyboard from "../components/HeroKeyboard"
+import PageShell from "../components/PageShell"
 
 import { saveUserApp , deleteUserApp } from "../firebase/shortcutService"
 import { useAuth } from "../context/useAuth"
+import { formatKey } from "../utils/shortcuts"
 
 export default function Editor({ apps , setApps }) {
     const { user } = useAuth()
@@ -111,12 +112,10 @@ export default function Editor({ apps , setApps }) {
     }
 
     return (
-        <main className="min-h-screen bg-(--bg)">
-            <Navbar />
-
-            <section className="mx-auto flex h-[calc(100vh-56px)] max-w-[82rem] flex-col overflow-hidden px-5 pb-4">
-                <div className="shrink-0 pt-2">
-                    <h1 className="text-2xl font-semibold text-(--text)">
+        <PageShell maxWidth="max-w-[82rem]" className="editor-page gap-4">
+            <div className="editor-landing w-full pt-3">
+                <div className="editor-heading">
+                    <h1 className="text-2xl font-semibold text-(--text) sm:text-3xl">
                         Shortcut Editor
                     </h1>
 
@@ -125,15 +124,16 @@ export default function Editor({ apps , setApps }) {
                     </p>
                 </div>
 
-                <div className="mt-4 grid min-h-0 flex-1 gap-4 overflow-hidden lg:grid-cols-[280px_minmax(0,1fr)]">
-                    <aside className="min-h-0 overflow-hidden rounded-[2rem] bg-transparent p-5">
+                <div className="editor-layout grid gap-4 lg:grid-cols-[17rem_minmax(0,1fr)]">
+                    <aside className="editor-sidebar rounded-[2rem] bg-transparent p-4 sm:p-5 lg:sticky lg:top-4 lg:self-start">
                         <h2 className="text-sm font-semibold text-white">
                             Apps
                         </h2>
 
-                        <div className="mt-4 space-y-2">
+                        <div className="editor-app-list mt-4 grid max-h-80 gap-2 overflow-y-auto pr-1 sm:grid-cols-2 lg:max-h-[42vh] lg:max-h-[42dvh] lg:grid-cols-1">
                             {apps.map((app) => (
                                 <button
+                                    type="button"
                                     key={app.id}
                                     onClick={() => setSelectedAppId(app.id)}
                                     className={`w-full rounded-2xl border px-4 py-3 text-left text-sm transition-all ${
@@ -156,6 +156,7 @@ export default function Editor({ apps , setApps }) {
                             />
 
                             <button
+                                type="button"
                                 onClick={addApp}
                                 className="mt-3 w-full rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-slate-950 transition hover:shadow-[0_0_28px_rgba(255,255,255,0.18)]"
                             >
@@ -164,6 +165,7 @@ export default function Editor({ apps , setApps }) {
 
                             {selectedApp && (
                                 <button
+                                    type="button"
                                     onClick={() => setDeleteAppOpen(true)}
                                     className="mt-3 w-full rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm font-semibold text-red-200 transition hover:bg-red-500/15"
                                 >
@@ -173,8 +175,8 @@ export default function Editor({ apps , setApps }) {
                         </div>
                     </aside>
 
-                    <div className="flex min-h-0 min-w-0 flex-col gap-4 overflow-hidden">
-                        <div className="shrink-0 overflow-visible rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-4">
+                    <div className="editor-main flex min-w-0 flex-col gap-4">
+                        <div className="editor-form-card rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-4">
                             <div className="grid gap-3 md:grid-cols-2">
                                 <input
                                     value={shortcutTitle}
@@ -191,20 +193,15 @@ export default function Editor({ apps , setApps }) {
                                 />
                             </div>
 
-                            <div className="mt-4 flex justify-center overflow-hidden">
-                                <div className="w-full max-w-[980px] overflow-hidden rounded-[2rem]">
-                                    <div className="flex justify-center">
-                                        <div className="origin-top scale-[0.66]">
-                                            <HeroKeyboard
-                                                activeKeys={selectedKeys}
-                                                onKeyClick={handleKeyClick}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
+                            <div className="editor-keyboard-wrap mt-4">
+                                <HeroKeyboard
+                                    activeKeys={selectedKeys}
+                                    density="editor"
+                                    onKeyClick={handleKeyClick}
+                                />
                             </div>
 
-                            <div className="mt-1 flex flex-wrap items-center gap-2">
+                            <div className="editor-selected-row mt-1 flex flex-wrap items-center gap-2">
                                 <span className="text-sm text-slate-500">
                                     Selected keys :
                                 </span>
@@ -226,6 +223,7 @@ export default function Editor({ apps , setApps }) {
 
                                 {selectedKeys.length > 0 && (
                                     <button
+                                        type="button"
                                         onClick={() => setSelectedKeys([])}
                                         className="rounded-full border border-white/10 px-3 py-1 text-sm text-slate-300"
                                     >
@@ -235,14 +233,16 @@ export default function Editor({ apps , setApps }) {
                             </div>
 
                             <button
+                                type="button"
                                 onClick={addShortcut}
                                 className="mt-3 rounded-2xl bg-white px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:shadow-[0_0_30px_rgba(255,255,255,0.18)]"
                             >
                                 Save Shortcut
                             </button>
-                        </div>
-                        <div className="min-h-0 flex-1 overflow-hidden rounded-[1.5rem] bg-transparent">
-                            <div className="mb-4 flex shrink-0 items-center justify-between gap-4 rounded-[1.5rem] bg-white/[0.035] px-5 py-5 backdrop-blur-xl">
+                    </div>
+
+                        <div className="editor-manage-card rounded-[1.5rem] bg-transparent">
+                            <div className="editor-manage-header mb-4 flex flex-col gap-4 rounded-[1.5rem] bg-white/[0.035] px-5 py-5 backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between">
                                 <div>
                                     <h2 className="text-lg font-semibold text-white">
                                         {selectedApp?.name || "No app selected"} Shortcuts
@@ -258,8 +258,8 @@ export default function Editor({ apps , setApps }) {
                                 </p>
                             </div>
 
-                            <div className="h-[calc(100%-77px)] overflow-y-auto p-4">
-                                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                            <div className="editor-shortcut-list p-1 sm:p-4">
+                                <div className="editor-shortcut-grid grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                                     {selectedApp?.shortcuts?.map((shortcut , index) => (
                                         <div
                                             key={`${shortcut.title}-${index}`}
@@ -274,6 +274,7 @@ export default function Editor({ apps , setApps }) {
                                             </p>
 
                                             <button
+                                                type="button"
                                                 onClick={() => deleteShortcut(index)}
                                                 className="mt-3 rounded-lg border border-red-400/20 px-2.5 py-1.5 text-[11px] font-semibold text-red-200 transition hover:bg-red-500/10"
                                             >
@@ -286,10 +287,10 @@ export default function Editor({ apps , setApps }) {
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
 
             {deleteAppOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 backdrop-blur-xl">
+                <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 px-4 py-6 backdrop-blur-xl">
                     <div className="w-full max-w-md rounded-[2rem] border border-white/10 bg-[#111827] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.45)]">
                         <p className="text-sm font-medium text-red-300">
                             Delete app
@@ -305,6 +306,7 @@ export default function Editor({ apps , setApps }) {
 
                         <div className="mt-6 flex justify-end gap-3">
                             <button
+                                type="button"
                                 onClick={() => setDeleteAppOpen(false)}
                                 className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/[0.08] hover:text-white"
                             >
@@ -312,6 +314,7 @@ export default function Editor({ apps , setApps }) {
                             </button>
 
                             <button
+                                type="button"
                                 onClick={removeApp}
                                 className="rounded-2xl bg-red-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-400 hover:shadow-[0_0_28px_rgba(239,68,68,0.24)]"
                             >
@@ -321,21 +324,6 @@ export default function Editor({ apps , setApps }) {
                     </div>
                 </div>
             )}
-        </main>
+        </PageShell>
     )
-}
-
-function formatKey(key) {
-    const labels = {
-        CmdLeft : "Cmd" ,
-        CmdRight : "Cmd" ,
-        OptionLeft : "Option" ,
-        OptionRight : "Option" ,
-        ShiftLeft : "Shift" ,
-        ShiftRight : "Shift" ,
-        ControlLeft : "Ctrl" ,
-        ControlRight : "Ctrl"
-    }
-
-    return labels[key] || key
 }
