@@ -60,22 +60,12 @@ export default function Home({ apps }) {
     return (
         <PageShell centerContent className="home-page">
             <div className="home-landing w-full lg:my-auto">
-                <div className="home-heading-row flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                    <div>
-                        <h1 className="text-3xl font-semibold text-(--text) sm:text-4xl">
-                            Find Shortcuts
-                        </h1>
-
-                        <p className="mt-2 text-sm text-(--muted) sm:text-base">
-                            Search shortcuts or click keys to build a shortcut visually
-                        </p>
-                    </div>
-
+                <div className="home-heading-row flex justify-center">
                     <input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Search 'cmd p'"
-                        className="w-full rounded-full border border-white/10 bg-white/4 px-5 py-3 text-sm outline-none transition-all placeholder:text-slate-500 focus:border-white/20 focus:bg-white/[0.07] md:max-w-md"
+                        className="w-full rounded-full border border-white/10 bg-white/4 px-5 py-3 text-sm outline-none transition-all placeholder:text-slate-500 focus:border-white/20 focus:bg-white/[0.07] md:max-w-3xl"
                     />
                 </div>
 

@@ -329,6 +329,15 @@
     .keyboard-viewport--detail .keyboard-shell {
         --keyboard-max-key: 44px;
     }
+
+    .keyboard-viewport--editor {
+        max-width: 590px;
+        margin-block-start: 0;
+    }
+
+    .keyboard-viewport--editor .keyboard-shell {
+        --keyboard-max-key: 33px;
+    }
 }
 
 @media (min-width: 1024px) and (max-height: 700px) {
@@ -346,6 +355,14 @@
 
     .keyboard-viewport--detail .keyboard-shell {
         --keyboard-max-key: 40px;
+    }
+
+    .keyboard-viewport--editor {
+        max-width: 540px;
+    }
+
+    .keyboard-viewport--editor .keyboard-shell {
+        --keyboard-max-key: 30px;
     }
 }
 
@@ -365,6 +382,14 @@
     .keyboard-viewport--detail .keyboard-shell {
         --keyboard-max-key: 36px;
     }
+
+    .keyboard-viewport--editor {
+        max-width: 490px;
+    }
+
+    .keyboard-viewport--editor .keyboard-shell {
+        --keyboard-max-key: 27px;
+    }
 }
 
 @media (min-width: 1024px) and (max-height: 520px) {
@@ -374,6 +399,14 @@
 
     .keyboard-viewport--home .keyboard-shell {
         --keyboard-max-key: 36px;
+    }
+
+    .keyboard-viewport--editor {
+        max-width: 440px;
+    }
+
+    .keyboard-viewport--editor .keyboard-shell {
+        --keyboard-max-key: 24px;
     }
 }
 
