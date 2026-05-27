@@ -8,6 +8,7 @@ import { useAuth } from "../context/useAuth"
 export default function Navbar() {
     const { user } = useAuth()
     const [menuOpen , setMenuOpen] = useState(false)
+    const [loginErrorOpen , setLoginErrorOpen] = useState(false)
 
     const links = [
         { label : "Home" , to : "/" } ,
@@ -53,7 +54,11 @@ export default function Navbar() {
                 ))}
             </div>
 
-            <AuthButton user={user} className="hidden md:block" />
+            <AuthButton
+                user={user}
+                className="hidden md:block"
+                onLoginFailure={() => setLoginErrorOpen(true)}
+            />
 
             <button
                 type="button"
@@ -90,15 +95,47 @@ export default function Navbar() {
                         user={user}
                         className="mt-3 w-full"
                         onAction={() => setMenuOpen(false)}
+                        onLoginFailure={() => setLoginErrorOpen(true)}
                     />
+                </div>
+            )}
+
+            {loginErrorOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6 backdrop-blur-xl">
+                    <div className="w-full max-w-md rounded-[2rem] border border-white/10 bg-[#111827] p-6 text-center shadow-[0_30px_90px_rgba(0,0,0,0.45)]">
+                        <button
+                            type="button"
+                            aria-label="Close login error"
+                            onClick={() => setLoginErrorOpen(false)}
+                            className="ml-auto flex rounded-full border border-white/10 bg-white/[0.04] p-2 text-slate-300 transition hover:bg-white/[0.08] hover:text-white"
+                        >
+                            <X size={16} />
+                        </button>
+
+                        <h2 className="mt-2 text-xl font-semibold text-white">
+                            Login failed
+                        </h2>
+
+                        <p className="mt-3 text-sm leading-6 text-slate-400">
+                            Please disable your ad blocker to log in, or use a browser without one.
+                        </p>
+
+                        <button
+                            type="button"
+                            onClick={() => setLoginErrorOpen(false)}
+                            className="mt-6 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:shadow-[0_0_28px_rgba(255,255,255,0.18)]"
+                        >
+                            Got it
+                        </button>
+                    </div>
                 </div>
             )}
         </nav>
     )
 }
 
-function AuthButton({ user , className = "" , onAction }) {
-    function handleClick() {
+function AuthButton({ user , className = "" , onAction , onLoginFailure }) {
+    async function handleClick() {
         onAction?.()
 
         if (user) {
@@ -106,7 +143,11 @@ function AuthButton({ user , className = "" , onAction }) {
             return
         }
 
-        loginWithGoogle()
+        const loggedInUser = await loginWithGoogle()
+
+        if (!loggedInUser) {
+            onLoginFailure?.()
+        }
     }
 
     return user ? (
