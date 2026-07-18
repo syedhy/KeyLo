@@ -6,11 +6,11 @@ import HeroKeyboard from "../components/HeroKeyboard"
 import PageShell from "../components/PageShell"
 import ShortcutCard from "../components/ShortcutCard"
 import ShortcutModal from "../components/ShortcutModal"
+import WorkspaceHeader from "../components/WorkspaceHeader"
 import {
     formatKey ,
-    getQueryWords ,
     getShortcutsFromApps ,
-    matchesShortcutSearch ,
+    searchShortcuts ,
     sortShortcutKeys
 } from "../utils/shortcuts"
 
@@ -23,9 +23,7 @@ export default function Home({ apps }) {
 
     const allShortcuts = useMemo(() => getShortcutsFromApps(apps) , [apps])
 
-    const results = useMemo(() => {
-        const queryWords = getQueryWords(search)
-
+    const scopedShortcuts = useMemo(() => {
         return allShortcuts.filter((shortcut) => {
             const matchesApp =
                 activeApp === "all" || shortcut.appId === activeApp
@@ -36,9 +34,13 @@ export default function Home({ apps }) {
                     (shortcut.keys || []).map(formatKey).includes(formatKey(key))
                 )
 
-            return matchesApp && matchesKeys && matchesShortcutSearch(shortcut , queryWords)
+            return matchesApp && matchesKeys
         })
-    } , [allShortcuts , selectedKeys , search , activeApp])
+    } , [allShortcuts , activeApp , selectedKeys])
+
+    const results = useMemo(() => {
+        return searchShortcuts(scopedShortcuts , search)
+    } , [scopedShortcuts , search])
 
     function handleKeyClick(key) {
         setSelectedKeys((currentKeys) => {
@@ -50,84 +52,80 @@ export default function Home({ apps }) {
         })
     }
 
-    function clearKeys() {
-        setSelectedKeys([])
-        setHoveredShortcut(null)
-    }
-
     const keyboardKeys = hoveredShortcut?.keys || selectedKeys
 
     return (
         <PageShell centerContent className="home-page">
-            <div className="home-landing w-full lg:my-auto">
-                <div className="home-heading-row flex justify-center">
-                    <input
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search 'cmd p'"
-                        className="w-full rounded-full border border-white/10 bg-white/4 px-5 py-3 text-sm outline-none transition-all placeholder:text-slate-500 focus:border-white/20 focus:bg-white/[0.07] md:max-w-3xl"
-                    />
-                </div>
+            <div className="workspace-layout home-layout flex w-full flex-col gap-[clamp(0.2rem,0.45vh,0.5rem)]">
+                <WorkspaceHeader
+                    eyebrow="Overview"
+                    title="Search shortcuts without the clutter"
+                    description="The desktop view keeps the keyboard explorer, while mobile stays lighter with search, filters, and ranked results."
+                    stats={[
+                        {
+                            label : "apps" ,
+                            value : apps.length
+                        } ,
+                        {
+                            label : "shortcuts" ,
+                            value : allShortcuts.length
+                        }
+                    ]}
+                    actions={
+                        <div className="workspace-header__actions-card w-full rounded-[1.5rem] border border-[var(--border)] bg-[var(--paper)] p-2.5 shadow-[0_12px_30px_rgba(20,25,34,0.05)] sm:p-4">
+                            <div className="flex items-center justify-between gap-3">
+                                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent-dark)]">
+                                    Search
+                                </p>
+
+                                <kbd className="hidden rounded-full border border-[var(--border)] bg-[var(--surface-soft)] px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-[var(--accent-dark)] sm:inline-flex">
+                                    Cmd K
+                                </kbd>
+                            </div>
+
+                            <input
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                placeholder="Search Cmd P, focus search, duplicate line..."
+                                className="mt-2.5 w-full rounded-full border border-[var(--border)] bg-[var(--surface-soft)] px-5 py-2.5 text-sm text-[var(--text)] outline-none transition placeholder:text-[var(--muted-soft)] focus:border-[var(--accent)] focus:bg-[var(--paper)]"
+                            />
+                        </div>
+                    }
+                />
 
                 <AppFilter
                     apps={apps}
                     activeApp={activeApp}
                     onChange={setActiveApp}
-                    className="home-filter"
                 />
 
-                <div className="home-feature-grid grid items-stretch gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
-                    <HeroKeyboard
-                        activeKeys={keyboardKeys}
-                        density="home"
-                        onKeyClick={handleKeyClick}
-                    />
+                <div className="grid items-start gap-2.5 lg:grid-cols-[minmax(0,1fr)_16rem]">
+                    <div className="hidden md:block">
+                        <HeroKeyboard
+                            activeKeys={keyboardKeys}
+                            density="home"
+                            onKeyClick={handleKeyClick}
+                        />
+                    </div>
 
                     <PreviewPanel shortcut={hoveredShortcut} />
                 </div>
 
-                <div className="home-current flex min-h-11 flex-wrap items-center gap-2">
-                    <span className="text-sm text-(--muted)">
-                        Current shortcut :
-                    </span>
-
-                    {keyboardKeys.length === 0 ? (
-                        <span className="text-sm text-(--muted)">
-                            No keys selected
-                        </span>
-                    ) : (
-                        sortShortcutKeys(keyboardKeys).map((key) => (
-                            <span
-                                key={key}
-                                className="rounded-full bg-white/6 px-3 py-1 text-sm text-white"
-                            >
-                                {formatKey(key)}
-                            </span>
-                        ))
-                    )}
-
-                    {selectedKeys.length > 0 && (
-                        <button
-                            type="button"
-                            onClick={clearKeys}
-                            className="rounded-full border border-white/10 bg-white/4 px-3 py-1 text-sm text-white"
-                        >
-                            Clear
-                        </button>
-                    )}
-                </div>
+                <p className="workspace-header__compact-hide hidden min-h-8 items-center text-sm font-semibold uppercase tracking-[0.18em] text-[var(--muted)] md:flex">
+                    Shortcuts
+                </p>
 
                 <div
                     onMouseLeave={() => setHoveredShortcut(null)}
-                    className="home-results"
+                    className="space-y-3"
                 >
                     {results.length === 0 && (
-                        <p className="rounded-3xl border border-white/10 bg-white/4 p-6 text-(--muted)">
+                        <p className="doodle-panel p-5 text-[var(--muted)]">
                             No shortcuts found
                         </p>
                     )}
 
-                    <div className="home-result-grid grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                         {results.map((shortcut) => (
                             <ShortcutCard
                                 key={`${shortcut.app}-${shortcut.title}`}
@@ -155,45 +153,45 @@ export default function Home({ apps }) {
 
 function PreviewPanel({ shortcut }) {
     return (
-        <div className="home-preview-panel hidden min-h-[15.5rem] rounded-[2rem] border border-white/10 bg-white/[0.035] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.24)] lg:block">
+        <div className="home-preview-panel doodle-panel hidden min-h-[14rem] p-4 lg:block lg:h-[20rem] lg:overflow-hidden">
             {shortcut ? (
-                <div className="flex h-full flex-col">
+                <div className="flex h-full min-h-0 flex-col">
                     <div className="flex min-w-0 items-center gap-3">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-lg font-bold text-slate-950 shadow-[0_0_28px_rgba(255,255,255,0.18)]">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--surface-soft)] text-lg font-bold text-[var(--accent-dark)] shadow-[0_10px_20px_rgba(20,25,34,0.05)]">
                             {shortcut.app?.[0]}
                         </div>
 
                         <div className="min-w-0">
-                            <p className="break-words text-sm text-slate-400">
+                            <p className="break-words text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
                                 {shortcut.app}
                             </p>
 
-                            <h2 className="break-words text-2xl font-semibold text-white">
+                            <h2 className="break-words text-[1.6rem] font-semibold tracking-[-0.04em] text-[var(--text)]">
                                 {shortcut.title}
                             </h2>
                         </div>
                     </div>
 
-                    <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-                        <p className="text-xs uppercase text-slate-500">
+                    <div className="mt-3 rounded-[1.5rem] border border-[var(--border)] bg-[var(--surface-soft)] p-3.5">
+                        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
                             Description
                         </p>
 
-                        <p className="mt-3 break-words text-sm leading-6 text-slate-300">
+                        <p className="mt-2.5 break-words text-sm leading-6 text-[var(--muted)]">
                             {shortcut.description || "No description added yet"}
                         </p>
                     </div>
 
-                    <div className="mt-auto rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-                        <p className="text-xs uppercase text-slate-500">
+                    <div className="mt-3 rounded-[1.5rem] border border-[var(--border)] bg-[var(--surface-soft)] p-3.5">
+                        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
                             Shortcut
                         </p>
 
-                        <div className="mt-3 flex flex-wrap gap-2">
+                        <div className="mt-2.5 flex flex-wrap gap-2">
                             {sortShortcutKeys(shortcut.keys).map((key) => (
                                 <span
                                     key={key}
-                                    className="rounded-xl border border-white/10 bg-white/[0.07] px-4 py-2 text-sm font-medium text-white"
+                                    className="rounded-full border border-[var(--border)] bg-[var(--paper)] px-4 py-2 text-sm font-semibold text-[var(--text)]"
                                 >
                                     {formatKey(key)}
                                 </span>
@@ -203,16 +201,16 @@ function PreviewPanel({ shortcut }) {
                 </div>
             ) : (
                 <div className="flex h-full flex-col justify-center">
-                    <p className="text-sm text-slate-500">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
                         Preview
                     </p>
 
-                    <h2 className="mt-3 text-2xl font-semibold text-white">
+                    <h2 className="mt-3 text-[1.6rem] font-semibold tracking-[-0.04em] text-[var(--text)]">
                         Hover a shortcut
                     </h2>
 
-                    <p className="mt-3 text-base leading-7 text-slate-400">
-                        Shortcut details will appear here with larger keys and app information
+                    <p className="mt-3 text-base leading-7 text-[var(--muted)]">
+                        Shortcut details appear here with larger keys and app information.
                     </p>
                 </div>
             )}

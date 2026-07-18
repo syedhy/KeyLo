@@ -11,67 +11,76 @@ export default function Navbar() {
     const [loginErrorOpen , setLoginErrorOpen] = useState(false)
 
     const links = [
-        { label : "Home" , to : "/" } ,
-        { label : "List" , to : "/apps" } ,
+        { label : "Overview" , to : "/" } ,
+        { label : "Browse" , to : "/apps" } ,
         { label : "Editor" , to : "/editor" }
     ]
 
     return (
-        <nav className="app-navbar relative z-20 flex min-h-[var(--nav-height)] items-center justify-between px-4 py-5 sm:px-6 md:px-10">
-            <div className="flex items-center gap-3">
-                <div className="app-navbar-logo flex h-14 w-14 items-center justify-center rounded-[1.35rem] border border-white/10 bg-white/6 shadow-[0_0_36px_rgba(255,255,255,0.10)]">
-                    <span className="text-2xl font-semibold text-white">
-                        K
-                    </span>
+        <nav className="relative z-20 border-b border-[var(--border)] bg-[rgba(249,251,252,0.84)] backdrop-blur-2xl">
+            <div className="mx-auto flex min-h-[var(--nav-height)] w-full max-w-[96rem] items-center gap-3 px-4 sm:px-6 lg:px-10 xl:px-12">
+                <div className="flex min-w-0 items-center gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-[1.1rem] border border-[var(--border-strong)] bg-[var(--paper)] shadow-[0_14px_32px_rgba(20,25,34,0.08)] sm:h-14 sm:w-14">
+                        <span className="text-[1.4rem] font-semibold text-[var(--text)]">
+                            K
+                        </span>
+                    </div>
+
+                    <div className="min-w-0">
+                        <h1 className="truncate text-[1.1rem] font-semibold tracking-[-0.04em] text-[var(--text)] sm:text-[1.25rem]">
+                            Keylo
+                        </h1>
+
+                        <p className="hidden text-xs text-[var(--muted)] sm:block">
+                            Doodle shortcut studio
+                        </p>
+                    </div>
                 </div>
 
-                <div>
-                    <h1 className="text-[1.35rem] font-semibold text-(--text)">
-                        KeyLo
-                    </h1>
-
-                    <p className="app-navbar-subtitle text-xs text-slate-500">
-                        Visual shortcut explorer
-                    </p>
+                <div className="hidden flex-1 items-center justify-center md:flex">
+                    <div className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--paper)] p-1 shadow-[0_10px_24px_rgba(20,25,34,0.05)]">
+                        {links.map((link) => (
+                            <NavLink
+                                key={link.to}
+                                to={link.to}
+                                className={({ isActive }) =>
+                                    `rounded-full px-4 py-2 text-sm font-medium transition-all ${
+                                        isActive
+                                            ? "bg-[var(--accent-soft)] text-[var(--accent-dark)] shadow-[inset_0_0_0_1px_rgba(38,42,52,0.18)]"
+                                            : "text-[var(--muted)] hover:bg-[var(--surface-soft)] hover:text-[var(--text)]"
+                                    }`
+                                }
+                            >
+                                {link.label}
+                            </NavLink>
+                        ))}
+                    </div>
                 </div>
+
+                <div className="hidden items-center gap-3 md:flex">
+                    <div className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent-dark)]">
+                        Cmd K
+                    </div>
+
+                    <AuthButton
+                        user={user}
+                        onLoginFailure={() => setLoginErrorOpen(true)}
+                    />
+                </div>
+
+                <button
+                    type="button"
+                    aria-expanded={menuOpen}
+                    aria-label="Toggle navigation"
+                    onClick={() => setMenuOpen((current) => !current)}
+                    className="ml-auto rounded-full border border-[var(--border)] bg-[var(--paper)] p-3 text-[var(--text)] shadow-[0_10px_24px_rgba(20,25,34,0.06)] transition hover:bg-[var(--surface-soft)] md:hidden"
+                >
+                    {menuOpen ? <X size={18} /> : <Menu size={18} />}
+                </button>
             </div>
-
-            <div className="hidden items-center gap-1 rounded-full border border-white/10 bg-white/4 px-2 py-2 shadow-sm backdrop-blur-xl md:flex">
-                {links.map((link) => (
-                    <NavLink
-                        key={link.to}
-                        to={link.to}
-                        className={({ isActive }) =>
-                            `rounded-full px-4 py-2 text-sm transition-all ${
-                                isActive
-                                    ? "bg-white text-slate-950 shadow-[0_0_24px_rgba(255,255,255,0.20)]"
-                                    : "text-slate-400 hover:bg-white/[0.07] hover:text-white"
-                            }`
-                        }
-                    >
-                        {link.label}
-                    </NavLink>
-                ))}
-            </div>
-
-            <AuthButton
-                user={user}
-                className="hidden md:block"
-                onLoginFailure={() => setLoginErrorOpen(true)}
-            />
-
-            <button
-                type="button"
-                aria-expanded={menuOpen}
-                aria-label="Toggle navigation"
-                onClick={() => setMenuOpen((current) => !current)}
-                className="rounded-full border border-white/10 bg-white/5 p-3 text-white transition hover:bg-white/10 md:hidden"
-            >
-                {menuOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
 
             {menuOpen && (
-                <div className="absolute left-4 right-4 top-full z-30 rounded-3xl border border-white/10 bg-[#111827]/95 p-3 shadow-(--shadow) backdrop-blur-xl md:hidden">
+                <div className="absolute left-4 right-4 top-full z-30 -mt-1 rounded-[1.75rem] border border-[var(--border)] bg-[var(--paper)] p-3 shadow-[var(--shadow)] backdrop-blur-2xl md:hidden">
                     <div className="grid gap-2">
                         {links.map((link) => (
                             <NavLink
@@ -79,10 +88,10 @@ export default function Navbar() {
                                 to={link.to}
                                 onClick={() => setMenuOpen(false)}
                                 className={({ isActive }) =>
-                                    `rounded-2xl px-4 py-3 text-sm transition-all ${
+                                    `rounded-2xl px-4 py-3 text-sm font-medium transition-all ${
                                         isActive
-                                            ? "bg-white text-slate-950"
-                                            : "text-slate-300 hover:bg-white/[0.07] hover:text-white"
+                                            ? "bg-[var(--accent-soft)] text-[var(--accent-dark)]"
+                                            : "text-[var(--muted)] hover:bg-[var(--surface-soft)] hover:text-[var(--text)]"
                                     }`
                                 }
                             >
@@ -101,29 +110,29 @@ export default function Navbar() {
             )}
 
             {loginErrorOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6 backdrop-blur-xl">
-                    <div className="w-full max-w-md rounded-[2rem] border border-white/10 bg-[#111827] p-6 text-center shadow-[0_30px_90px_rgba(0,0,0,0.45)]">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(24,27,36,0.44)] px-4 py-6 backdrop-blur-lg">
+                    <div className="w-full max-w-md rounded-[2rem] border border-[var(--border)] bg-[var(--paper)] p-6 text-center shadow-[var(--shadow)]">
                         <button
                             type="button"
                             aria-label="Close login error"
                             onClick={() => setLoginErrorOpen(false)}
-                            className="ml-auto flex rounded-full border border-white/10 bg-white/[0.04] p-2 text-slate-300 transition hover:bg-white/[0.08] hover:text-white"
+                            className="ml-auto flex rounded-full border border-[var(--border)] bg-[var(--surface-soft)] p-2 text-[var(--muted)] transition hover:bg-[var(--surface-hover)] hover:text-[var(--text)]"
                         >
                             <X size={16} />
                         </button>
 
-                        <h2 className="mt-2 text-xl font-semibold text-white">
+                        <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em] text-[var(--text)]">
                             Login failed
                         </h2>
 
-                        <p className="mt-3 text-sm leading-6 text-slate-400">
+                        <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
                             Please disable your ad blocker to log in, or use a browser without one.
                         </p>
 
                         <button
                             type="button"
                             onClick={() => setLoginErrorOpen(false)}
-                            className="mt-6 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:shadow-[0_0_28px_rgba(255,255,255,0.18)]"
+                            className="mt-6 rounded-full border border-[var(--border)] bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-white transition hover:translate-y-[-1px] hover:shadow-[0_14px_24px_rgba(38,42,52,0.22)]"
                         >
                             Got it
                         </button>
@@ -154,7 +163,7 @@ function AuthButton({ user , className = "" , onAction , onLoginFailure }) {
         <button
             type="button"
             onClick={handleClick}
-            className={`rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-white transition-all hover:border-white/20 hover:bg-white/10 ${className}`}
+            className={`rounded-full border border-[var(--border)] bg-[var(--paper)] px-5 py-2.5 text-sm font-semibold text-[var(--text)] shadow-[0_10px_24px_rgba(20,25,34,0.05)] transition hover:bg-[var(--surface-soft)] ${className}`}
         >
             Logout
         </button>
@@ -162,7 +171,7 @@ function AuthButton({ user , className = "" , onAction , onLoginFailure }) {
         <button
             type="button"
             onClick={handleClick}
-            className={`rounded-full border border-white/10 bg-white/5 px-5 py-2.5 text-sm font-medium text-white transition-all hover:border-white/20 hover:bg-white/10 ${className}`}
+            className={`rounded-full border border-[var(--border)] bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(38,42,52,0.18)] transition hover:translate-y-[-1px] hover:shadow-[0_18px_28px_rgba(38,42,52,0.24)] ${className}`}
         >
             Login
         </button>

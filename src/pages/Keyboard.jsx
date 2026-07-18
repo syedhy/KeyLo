@@ -2,9 +2,10 @@ import { useMemo , useState } from "react"
 
 import HeroKeyboard from "../components/HeroKeyboard"
 import PageShell from "../components/PageShell"
+import ShortcutCard from "../components/ShortcutCard"
+import WorkspaceHeader from "../components/WorkspaceHeader"
 import {
     formatKey ,
-    formatShortcut ,
     getShortcutsFromApps ,
     sortShortcutKeys
 } from "../utils/shortcuts"
@@ -20,7 +21,7 @@ export default function Keyboard({ apps = [] }) {
         }
 
         return allShortcuts.filter((shortcut) =>
-            selectedKeys.every((key) => shortcut.keys.includes(key))
+            selectedKeys.every((key) => (shortcut.keys || []).includes(key))
         )
     } , [allShortcuts , selectedKeys])
 
@@ -40,26 +41,31 @@ export default function Keyboard({ apps = [] }) {
 
     return (
         <PageShell centerContent className="builder-page">
-            <div className="builder-landing w-full lg:my-auto">
-                <div className="builder-heading-row flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                    <div>
-                        <h1 className="text-3xl font-semibold text-(--text) sm:text-4xl">
-                            Shortcut Builder
-                        </h1>
-
-                        <p className="mt-2 text-sm text-(--muted) sm:text-base">
-                            Click keys to build a shortcut and find matching commands
-                        </p>
-                    </div>
-
-                    <button
-                        type="button"
-                        onClick={clearKeys}
-                        className="w-fit rounded-full border border-(--border) bg-(--surface) px-5 py-3 text-sm text-(--text) transition-colors hover:bg-(--surface-soft)"
-                    >
-                        Clear keys
-                    </button>
-                </div>
+            <div className="workspace-layout builder-layout flex w-full flex-col gap-[clamp(0.75rem,1.5vh,1.2rem)]">
+                <WorkspaceHeader
+                    eyebrow="Builder"
+                    title="Use the keyboard to shape a shortcut"
+                    description="This page stays as a simple key-combination builder for desktop, with a calmer, more readable layout."
+                    stats={[
+                        {
+                            label : "selected keys" ,
+                            value : selectedKeys.length
+                        } ,
+                        {
+                            label : "matches" ,
+                            value : matchingShortcuts.length
+                        }
+                    ]}
+                    actions={
+                        <button
+                            type="button"
+                            onClick={clearKeys}
+                            className="w-full rounded-full border border-[var(--border)] bg-[var(--paper)] px-5 py-3 text-sm font-semibold text-[var(--text)] shadow-[0_10px_24px_rgba(20,25,34,0.05)] transition hover:bg-[var(--surface-soft)]"
+                        >
+                            Clear keys
+                        </button>
+                    }
+                />
 
                 <HeroKeyboard
                     activeKeys={selectedKeys}
@@ -67,20 +73,20 @@ export default function Keyboard({ apps = [] }) {
                     onKeyClick={handleKeyClick}
                 />
 
-                <div className="builder-current flex flex-wrap items-center gap-2">
-                    <span className="text-sm text-(--muted)">
-                        Current shortcut :
+                <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-sm text-[var(--muted)]">
+                        Current shortcut:
                     </span>
 
                     {selectedKeys.length === 0 ? (
-                        <span className="text-sm text-(--muted)">
+                        <span className="text-sm text-[var(--muted)]">
                             No keys selected
                         </span>
                     ) : (
                         sortShortcutKeys(selectedKeys).map((key) => (
                             <span
                                 key={key}
-                                className="rounded-full bg-(--surface) px-3 py-1 text-sm text-(--accent-dark)"
+                                className="rounded-full border border-[var(--border)] bg-[var(--paper)] px-3 py-1 text-sm font-medium text-[var(--text)]"
                             >
                                 {formatKey(key)}
                             </span>
@@ -88,37 +94,26 @@ export default function Keyboard({ apps = [] }) {
                     )}
                 </div>
 
-                <div className="builder-results">
+                <div className="space-y-4">
                     {selectedKeys.length === 0 && (
-                        <p className="rounded-3xl border border-(--border) bg-(--surface) p-6 text-(--muted)">
+                        <p className="doodle-panel p-5 text-[var(--muted)]">
                             Click keys on the keyboard to start searching
                         </p>
                     )}
 
                     {selectedKeys.length > 0 && matchingShortcuts.length === 0 && (
-                        <p className="rounded-3xl border border-(--border) bg-(--surface) p-6 text-(--muted)">
+                        <p className="doodle-panel p-5 text-[var(--muted)]">
                             No shortcuts found for this key combination
                         </p>
                     )}
 
-                    <div className="builder-result-grid grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                         {matchingShortcuts.map((shortcut) => (
-                            <div
+                            <ShortcutCard
                                 key={`${shortcut.app}-${shortcut.title}`}
-                                className="rounded-3xl border border-(--border) bg-(--surface) p-5"
-                            >
-                                <p className="text-xs text-(--muted)">
-                                    {shortcut.app}
-                                </p>
-
-                                <p className="mt-1 break-words text-sm font-semibold text-(--text)">
-                                    {shortcut.title}
-                                </p>
-
-                                <p className="mt-3 break-words text-sm text-(--accent-dark)">
-                                    {formatShortcut(shortcut.keys)}
-                                </p>
-                            </div>
+                                shortcut={shortcut}
+                                showDescription
+                            />
                         ))}
                     </div>
                 </div>

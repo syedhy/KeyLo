@@ -1,99 +1,96 @@
 .keyboard-shell {
     --keyboard-max-key: 50px;
-    --key-unit: clamp(16px , calc((100vw - 2rem) / 16.7) , var(--keyboard-max-key));
-    --key-gap: calc(var(--key-unit) * 0.12);
-    --keyboard-pad: calc(var(--key-unit) * 0.4);
-    --keyboard-radius: calc(var(--key-unit) * 0.64);
-    --key-height: calc(var(--key-unit) * 0.96);
+    --key-unit: clamp(15px , calc((100vw - 2rem) / 16.7) , var(--keyboard-max-key));
+    --key-gap: calc(var(--key-unit) * 0.1);
+    --keyboard-pad: calc(var(--key-unit) * 0.28);
+    --keyboard-radius: calc(var(--key-unit) * 0.66);
+    --key-height: calc(var(--key-unit) * 0.92);
 
     --keyboard-bg:
         linear-gradient(
-            145deg ,
-            #1d2128 0% ,
-            #16191f 42% ,
-            #0f1116 100%
+            180deg ,
+            rgba(255 , 255 , 254 , 0.98) 0% ,
+            rgba(239 , 243 , 246 , 0.98) 100%
         );
 
-    --keyboard-border: rgba(255 , 255 , 255 , 0.06);
+    --keyboard-border: rgba(33 , 37 , 45 , 0.12);
 
     --keyboard-shadow:
-        0 45px 100px rgba(0 , 0 , 0 , 0.55) ,
-        0 12px 32px rgba(0 , 0 , 0 , 0.30) ,
-        inset 0 1px 0 rgba(255 , 255 , 255 , 0.04);
+        0 22px 46px rgba(23 , 27 , 36 , 0.07) ,
+        0 10px 20px rgba(23 , 27 , 36 , 0.04) ,
+        inset 0 1px 0 rgba(255 , 255 , 255 , 0.9);
 
     --keyboard-light:
+        repeating-linear-gradient(
+            135deg ,
+            rgba(255 , 255 , 255 , 0.16) 0 14px ,
+            rgba(255 , 255 , 255 , 0.05) 14px 28px
+        ) ,
         radial-gradient(
             circle at top left ,
-            rgba(255 , 255 , 255 , 0.05) ,
+            rgba(255 , 255 , 255 , 0.82) ,
             transparent 30%
         ) ,
         radial-gradient(
             circle at bottom right ,
-            rgba(148 , 163 , 184 , 0.06) ,
-            transparent 34%
+            rgba(38 , 42 , 52 , 0.06) ,
+            transparent 32%
         );
 
-    --key-border: #343943;
+    --key-border: rgba(33 , 37 , 45 , 0.12);
 
     --key-bg:
         linear-gradient(
             180deg ,
-            #343943 0% ,
-            #242933 48% ,
-            #171b22 100%
+            rgba(255 , 255 , 255 , 0.98) 0% ,
+            rgba(243 , 246 , 248 , 0.99) 100%
         );
 
-    --key-text: #f1f5f9;
-    --key-subtext: #9ca3af;
+    --key-text: #1f232c;
+    --key-subtext: #6e7482;
 
-    --key-highlight: rgba(255 , 255 , 255 , 0.08);
+    --key-highlight: rgba(255 , 255 , 255 , 0.76);
 
     --key-shadow:
-        0 5px 0 #08090c ,
-        0 12px 20px rgba(0 , 0 , 0 , 0.45) ,
-        inset 0 1px 0 rgba(255 , 255 , 255 , 0.10) ,
-        inset 0 -5px 0 rgba(0 , 0 , 0 , 0.40);
+        0 4px 0 rgba(34 , 38 , 48 , 0.12) ,
+        0 10px 18px rgba(23 , 27 , 36 , 0.09) ,
+        inset 0 1px 0 rgba(255 , 255 , 255 , 0.94);
 
-    --key-hover-border: rgba(255 , 255 , 255 , 0.18);
+    --key-hover-border: rgba(38 , 42 , 52 , 0.18);
 
     --key-hover-bg:
         linear-gradient(
             180deg ,
-            #414754 0% ,
-            #2b313c 46% ,
-            #1b2028 100%
+            rgba(255 , 255 , 255 , 1) 0% ,
+            rgba(241 , 244 , 246 , 1) 100%
         );
 
-    --key-hover-highlight: rgba(255 , 255 , 255 , 0.14);
+    --key-hover-highlight: rgba(255 , 255 , 255 , 0.88);
 
     --key-hover-shadow:
-        0 0 16px rgba(255 , 255 , 255 , 0.05) ,
-        0 0 34px rgba(148 , 163 , 184 , 0.10) ,
-        0 5px 0 #0a0c10 ,
-        0 14px 22px rgba(0 , 0 , 0 , 0.46) ,
-        inset 0 1px 0 rgba(255 , 255 , 255 , 0.12) ,
-        inset 0 -5px 0 rgba(0 , 0 , 0 , 0.38);
+        0 0 0 1px rgba(38 , 42 , 52 , 0.08) ,
+        0 6px 0 rgba(34 , 38 , 48 , 0.08) ,
+        0 12px 22px rgba(20 , 25 , 34 , 0.08) ,
+        inset 0 1px 0 rgba(255 , 255 , 255 , 0.96);
 
-    --key-active-border: #e5e7eb;
+    --key-active-border: rgba(38 , 42 , 52 , 0.36);
 
     --key-active-bg:
         linear-gradient(
             180deg ,
-            #ffffff 0% ,
-            #dbe4ef 42% ,
-            #94a3b8 100%
+            rgba(56 , 60 , 70 , 0.98) 0% ,
+            rgba(28 , 31 , 38 , 0.98) 100%
         );
 
-    --key-active-text: #111827;
-    --key-active-subtext: #4b5563;
+    --key-active-text: #f7f9fc;
+    --key-active-subtext: #e3e7ee;
 
-    --key-active-highlight: rgba(255 , 255 , 255 , 0.62);
+    --key-active-highlight: rgba(255 , 255 , 255 , 0.16);
 
     --key-active-shadow:
-        0 0 20px rgba(255 , 255 , 255 , 0.12) ,
-        0 0 42px rgba(148 , 163 , 184 , 0.16) ,
-        inset 0 1px 0 rgba(255 , 255 , 255 , 0.90) ,
-        inset 0 3px 8px rgba(255 , 255 , 255 , 0.22);
+        0 0 0 1px rgba(38 , 42 , 52 , 0.14) ,
+        inset 0 1px 0 rgba(255 , 255 , 255 , 0.12) ,
+        0 10px 18px rgba(20 , 25 , 34 , 0.16);
 }
 
 @supports (width: 1cqw) {
@@ -104,35 +101,85 @@
 
 .keyboard-viewport {
     container-type: inline-size;
-    margin-block-start: 1rem;
+    margin-block-start: clamp(0.35rem , 0.9vh , 0.8rem);
     margin-inline: auto;
     width: 100%;
-    max-width: 860px;
-    perspective: 1800px;
+    max-width: 920px;
+    perspective: 1600px;
 }
 
 .keyboard-viewport--compact {
-    max-width: 640px;
+    max-width: 680px;
 }
 
 .keyboard-viewport--compact .keyboard-shell {
-    --keyboard-max-key: 36px;
+    --keyboard-max-key: 40px;
 }
 
 .keyboard-viewport--home {
-    max-width: 860px;
+    max-width: none;
+    margin-block-start: 0;
+    --keyboard-max-key: 92px;
+    --keyboard-radius: calc(var(--key-unit) * 0.2);
+}
+
+.keyboard-viewport--home .keyboard-shell {
+    overflow: visible;
+    width: fit-content;
+    margin-inline: auto;
+    --keyboard-pad: calc(var(--key-unit) * 0.24);
+}
+
+.keyboard-viewport--home .keyboard-content {
+    width: max-content;
+    align-items: flex-start;
+}
+
+.keyboard-viewport--home .keyboard-row {
+    width: max-content;
+    justify-content: flex-start;
 }
 
 .keyboard-viewport--detail {
-    max-width: 820px;
+    max-width: 860px;
+    --keyboard-max-key: 44px;
 }
 
 .keyboard-viewport--editor {
-    max-width: 640px;
+    max-width: 680px;
+    --keyboard-max-key: 32px;
 }
 
 .keyboard-viewport--editor .keyboard-shell {
-    --keyboard-max-key: 36px;
+    --keyboard-max-key: 32px;
+}
+
+@media (max-height: 860px) {
+    .keyboard-viewport {
+        margin-block-start: clamp(0.2rem , 0.5vh , 0.5rem);
+    }
+
+    .keyboard-viewport--home {
+        --keyboard-max-key: 72px;
+    }
+
+    .keyboard-viewport--detail {
+        --keyboard-max-key: 38px;
+    }
+
+    .keyboard-shell {
+        --keyboard-pad: calc(var(--key-unit) * 0.22);
+    }
+}
+
+@media (max-height: 760px) {
+    .keyboard-viewport--home {
+        --keyboard-max-key: 64px;
+    }
+
+    .keyboard-viewport--detail {
+        --keyboard-max-key: 34px;
+    }
 }
 
 .keyboard-shell {
@@ -144,7 +191,7 @@
     background: var(--keyboard-bg);
     padding: var(--keyboard-pad);
     box-shadow: var(--keyboard-shadow);
-    backdrop-filter: blur(24px);
+    backdrop-filter: blur(20px);
 }
 
 .keyboard-shell::before {
@@ -178,7 +225,7 @@
     height: calc(var(--key-height) * var(--key-height-ratio , 1));
     border-radius: calc(var(--key-unit) * 0.18);
     font-size: calc(var(--key-unit) * 0.2);
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 0;
     transition:
         transform 150ms ease ,
@@ -195,8 +242,8 @@
 }
 
 .keyboard-key:hover {
-    transform: translateY(1px);
-    filter: brightness(1.04);
+    transform: translateY(-1px);
+    filter: brightness(1.02);
 }
 
 .keyboard-key.is-active {
@@ -273,8 +320,8 @@
     margin-bottom: calc(var(--key-unit) * 0.08);
     font-size: calc(var(--key-unit) * 0.14);
     color: var(--key-subtext);
-    opacity: 0.75;
-    font-weight: 500;
+    opacity: 0.82;
+    font-weight: 600;
 }
 
 .keyboard-key.is-active .keyboard-key-sub {
@@ -283,7 +330,7 @@
 
 .keyboard-key-label {
     color: var(--key-text);
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .keyboard-key.is-active .keyboard-key-label {
@@ -305,6 +352,12 @@
     font-size: calc(var(--key-unit) * 0.22);
 }
 
+@media (max-width: 767px) {
+    .keyboard-viewport {
+        display: none;
+    }
+}
+
 @media (max-width: 480px) {
     .keyboard-key-sub {
         display: none;
@@ -313,96 +366,78 @@
 
 @media (min-width: 1024px) and (max-height: 760px) {
     .keyboard-viewport--home {
-        max-width: 820px;
+        max-width: 860px;
         margin-block-start: 0;
     }
 
     .keyboard-viewport--home .keyboard-shell {
-        --keyboard-max-key: 48px;
+        --keyboard-max-key: 44px;
     }
 
     .keyboard-viewport--detail {
-        max-width: 760px;
+        max-width: 800px;
         margin-block-start: 0;
     }
 
     .keyboard-viewport--detail .keyboard-shell {
-        --keyboard-max-key: 44px;
+        --keyboard-max-key: 40px;
     }
 
     .keyboard-viewport--editor {
-        max-width: 590px;
+        max-width: 620px;
         margin-block-start: 0;
     }
 
     .keyboard-viewport--editor .keyboard-shell {
-        --keyboard-max-key: 33px;
+        --keyboard-max-key: 28px;
     }
 }
 
 @media (min-width: 1024px) and (max-height: 700px) {
     .keyboard-viewport--home {
-        max-width: 760px;
+        max-width: 800px;
     }
 
     .keyboard-viewport--home .keyboard-shell {
-        --keyboard-max-key: 44px;
-    }
-
-    .keyboard-viewport--detail {
-        max-width: 690px;
-    }
-
-    .keyboard-viewport--detail .keyboard-shell {
         --keyboard-max-key: 40px;
     }
 
+    .keyboard-viewport--detail {
+        max-width: 740px;
+    }
+
+    .keyboard-viewport--detail .keyboard-shell {
+        --keyboard-max-key: 36px;
+    }
+
     .keyboard-viewport--editor {
-        max-width: 540px;
+        max-width: 560px;
     }
 
     .keyboard-viewport--editor .keyboard-shell {
-        --keyboard-max-key: 30px;
+        --keyboard-max-key: 26px;
     }
 }
 
 @media (min-width: 1024px) and (max-height: 600px) {
     .keyboard-viewport--home {
-        max-width: 690px;
+        max-width: 740px;
     }
 
     .keyboard-viewport--home .keyboard-shell {
-        --keyboard-max-key: 40px;
+        --keyboard-max-key: 36px;
     }
 
     .keyboard-viewport--detail {
-        max-width: 610px;
+        max-width: 680px;
     }
 
     .keyboard-viewport--detail .keyboard-shell {
-        --keyboard-max-key: 36px;
+        --keyboard-max-key: 32px;
     }
 
     .keyboard-viewport--editor {
-        max-width: 490px;
-    }
-
-    .keyboard-viewport--editor .keyboard-shell {
-        --keyboard-max-key: 27px;
-    }
-}
-
-@media (min-width: 1024px) and (max-height: 520px) {
-    .keyboard-viewport--home {
-        max-width: 610px;
-    }
-
-    .keyboard-viewport--home .keyboard-shell {
-        --keyboard-max-key: 36px;
-    }
-
-    .keyboard-viewport--editor {
-        max-width: 440px;
+        max-width: 520px;
     }
 
     .keyboard-viewport--editor .keyboard-shell {

@@ -1,6 +1,6 @@
 export default function AppFilter({ apps , activeApp , onChange , className = "" }) {
     return (
-        <div className={`no-scrollbar max-w-full overflow-x-auto pb-2 ${className}`}>
+        <div className={`no-scrollbar max-w-full overflow-x-auto pb-0 ${className}`}>
             <div className="flex w-max max-w-none gap-2">
                 <FilterButton
                     active={activeApp === "all"}
@@ -28,10 +28,11 @@ function FilterButton({ active , children , onClick }) {
         <button
             type="button"
             onClick={onClick}
-            className={`rounded-full border px-4 py-2 text-sm transition-all ${
+            aria-pressed={active}
+            className={`rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all ${
                 active
-                    ? "border-white bg-white text-slate-950 shadow-[0_0_24px_rgba(255,255,255,0.22)]"
-                    : "border-white/10 bg-white/[0.04] text-slate-300 hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
+                    ? "border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent-dark)] shadow-[0_10px_24px_rgba(38,42,52,0.10)]"
+                    : "border-[var(--border)] bg-[var(--paper)] text-[var(--muted)] hover:border-[var(--border-strong)] hover:bg-[var(--surface-soft)] hover:text-[var(--text)]"
             }`}
         >
             {children}

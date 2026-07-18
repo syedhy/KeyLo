@@ -5,10 +5,10 @@ import CommandSearch from "../components/CommandSearch"
 import PageShell from "../components/PageShell"
 import ShortcutCard from "../components/ShortcutCard"
 import ShortcutModal from "../components/ShortcutModal"
+import WorkspaceHeader from "../components/WorkspaceHeader"
 import {
-    getQueryWords ,
     getShortcutsFromApps ,
-    matchesShortcutSearch
+    searchShortcuts
 } from "../utils/shortcuts"
 
 export default function Apps({ apps }) {
@@ -18,74 +18,83 @@ export default function Apps({ apps }) {
 
     const allShortcuts = useMemo(() => getShortcutsFromApps(apps) , [apps])
 
-    const results = useMemo(() => {
-        const queryWords = getQueryWords(search)
-
+    const scopedShortcuts = useMemo(() => {
         return allShortcuts.filter((shortcut) => {
-            const matchesApp =
-                activeApp === "all" || shortcut.appId === activeApp
-
-            return matchesApp && matchesShortcutSearch(shortcut , queryWords)
+            return activeApp === "all" || shortcut.appId === activeApp
         })
-    } , [allShortcuts , activeApp , search])
+    } , [allShortcuts , activeApp])
+
+    const results = useMemo(() => {
+        return searchShortcuts(scopedShortcuts , search)
+    } , [scopedShortcuts , search])
 
     return (
-        <PageShell className="gap-4">
-            <div className="pt-4 sm:pt-6">
-                <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                    <div>
-                        <h1 className="text-3xl font-semibold text-(--text) sm:text-4xl">
-                            List Shortcuts
-                        </h1>
+        <PageShell className="gap-[clamp(0.75rem,1.5vh,1.2rem)]">
+            <div className="workspace-layout flex w-full flex-col gap-[clamp(0.75rem,1.5vh,1.2rem)]">
+                <WorkspaceHeader
+                    eyebrow="Browse"
+                    title="Every shortcut in one calm list"
+                    description="This page skips the keyboard view entirely and keeps search, filters, and ranked results front and center."
+                    stats={[
+                        {
+                            label : "apps" ,
+                            value : apps.length
+                        } ,
+                        {
+                            label : "shortcuts" ,
+                            value : scopedShortcuts.length
+                        }
+                    ]}
+                    actions={
+                        <div className="workspace-header__actions-card w-full rounded-[1.5rem] border border-[var(--border)] bg-[var(--paper)] p-4 shadow-[0_12px_30px_rgba(20,25,34,0.05)]">
+                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent-dark)]">
+                                Search
+                            </p>
 
-                        <p className="mt-2 text-sm text-(--muted) sm:text-base">
-                            Browse all shortcuts without the keyboard
-                        </p>
-                    </div>
-
-                    <input
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search 'command palette'"
-                        className="w-full rounded-full border border-white/10 bg-white/4 px-5 py-3 text-sm outline-none transition-all placeholder:text-slate-500 focus:border-white/20 focus:bg-white/[0.07] md:max-w-md"
-                    />
-                </div>
+                            <input
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                placeholder="Search command palette, duplicate line..."
+                                className="mt-3 w-full rounded-full border border-[var(--border)] bg-[var(--surface-soft)] px-5 py-3 text-sm text-[var(--text)] outline-none transition placeholder:text-[var(--muted-soft)] focus:border-[var(--accent)] focus:bg-[var(--paper)]"
+                            />
+                        </div>
+                    }
+                />
 
                 <AppFilter
                     apps={apps}
                     activeApp={activeApp}
                     onChange={setActiveApp}
-                    className="mt-6"
+                />
+
+                <div className="space-y-4">
+                    {results.length === 0 && (
+                        <p className="doodle-panel p-5 text-[var(--muted)]">
+                            No shortcuts found
+                        </p>
+                    )}
+
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                        {results.map((shortcut) => (
+                            <ShortcutCard
+                                key={`${shortcut.app}-${shortcut.title}`}
+                                shortcut={shortcut}
+                                onOpen={setOpenedShortcut}
+                            />
+                        ))}
+                    </div>
+                </div>
+
+                <ShortcutModal
+                    shortcut={openedShortcut}
+                    onClose={() => setOpenedShortcut(null)}
+                />
+
+                <CommandSearch
+                    shortcuts={allShortcuts}
+                    onSelect={setOpenedShortcut}
                 />
             </div>
-
-            <div className="pb-4 pt-2">
-                {results.length === 0 && (
-                    <p className="rounded-3xl border border-white/10 bg-white/4 p-6 text-(--muted)">
-                        No shortcuts found
-                    </p>
-                )}
-
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {results.map((shortcut) => (
-                        <ShortcutCard
-                            key={`${shortcut.app}-${shortcut.title}`}
-                            shortcut={shortcut}
-                            onOpen={setOpenedShortcut}
-                        />
-                    ))}
-                </div>
-            </div>
-
-            <ShortcutModal
-                shortcut={openedShortcut}
-                onClose={() => setOpenedShortcut(null)}
-            />
-
-            <CommandSearch
-                shortcuts={allShortcuts}
-                onSelect={setOpenedShortcut}
-            />
         </PageShell>
     )
 }
