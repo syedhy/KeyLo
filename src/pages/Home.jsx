@@ -1,4 +1,6 @@
-import { useMemo , useState } from "react"
+import { useMemo, useState, useRef } from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
 
 import AppFilter from "../components/AppFilter"
 import CommandSearch from "../components/CommandSearch"
@@ -54,9 +56,22 @@ export default function Home({ apps }) {
 
     const keyboardKeys = hoveredShortcut?.keys || selectedKeys
 
+    const container = useRef(null)
+
+    useGSAP(() => {
+        gsap.fromTo(".shortcut-card", 
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out", overwrite: "auto" }
+        )
+        gsap.fromTo(".home-preview-panel", 
+            { scale: 0.95, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.4, delay: 0.1, ease: "power2.out", overwrite: "auto" }
+        )
+    }, { scope: container, dependencies: [results, hoveredShortcut] })
+
     return (
         <PageShell centerContent className="home-page">
-            <div className="workspace-layout home-layout flex w-full flex-col gap-[clamp(0.2rem,0.45vh,0.5rem)]">
+            <div ref={container} className="workspace-layout home-layout flex w-full flex-col gap-[clamp(0.2rem,0.45vh,0.5rem)]">
                 <WorkspaceHeader
                     eyebrow="Overview"
                     title="Search shortcuts without the clutter"

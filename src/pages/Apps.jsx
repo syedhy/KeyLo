@@ -1,4 +1,6 @@
-import { useMemo , useState } from "react"
+import { useMemo, useState, useRef } from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
 
 import AppFilter from "../components/AppFilter"
 import CommandSearch from "../components/CommandSearch"
@@ -28,9 +30,18 @@ export default function Apps({ apps }) {
         return searchShortcuts(scopedShortcuts , search)
     } , [scopedShortcuts , search])
 
+    const container = useRef(null)
+
+    useGSAP(() => {
+        gsap.fromTo(".shortcut-card", 
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out", overwrite: "auto" }
+        )
+    }, { scope: container, dependencies: [results] })
+
     return (
         <PageShell className="gap-[clamp(0.75rem,1.5vh,1.2rem)]">
-            <div className="workspace-layout flex w-full flex-col gap-[clamp(0.75rem,1.5vh,1.2rem)]">
+            <div ref={container} className="workspace-layout flex w-full flex-col gap-[clamp(0.75rem,1.5vh,1.2rem)]">
                 <WorkspaceHeader
                     eyebrow="Browse"
                     title="Every shortcut in one calm list"

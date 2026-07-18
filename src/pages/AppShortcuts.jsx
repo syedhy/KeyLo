@@ -1,4 +1,6 @@
-import { useMemo , useState } from "react"
+import { useMemo, useState, useRef } from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
 import { Link , useParams } from "react-router-dom"
 
 import CommandSearch from "../components/CommandSearch"
@@ -35,9 +37,22 @@ export default function AppShortcuts({ apps }) {
         return searchShortcuts(shortcuts , search)
     } , [shortcuts , search])
 
+    const container = useRef(null)
+
+    useGSAP(() => {
+        gsap.fromTo(".shortcut-card", 
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out", overwrite: "auto" }
+        )
+        gsap.fromTo(".detail-preview-panel", 
+            { scale: 0.95, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.4, delay: 0.1, ease: "power2.out", overwrite: "auto" }
+        )
+    }, { scope: container, dependencies: [filteredShortcuts, selectedShortcut] })
+
     return (
         <PageShell centerContent className="detail-page">
-            <div className="workspace-layout detail-layout flex w-full flex-col gap-[clamp(0.75rem,1.5vh,1.2rem)]">
+            <div ref={container} className="workspace-layout detail-layout flex w-full flex-col gap-[clamp(0.75rem,1.5vh,1.2rem)]">
                 <Link
                     to="/apps"
                     className="inline-flex w-fit items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--paper)] px-4 py-2 text-sm font-medium text-[var(--muted)] shadow-[0_10px_24px_rgba(20,25,34,0.05)] transition hover:bg-[var(--surface-soft)] hover:text-[var(--text)]"
