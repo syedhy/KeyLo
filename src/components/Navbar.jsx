@@ -1,25 +1,35 @@
-import { Menu , X } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import { NavLink } from "react-router-dom"
-import { useState } from "react"
+import { useState, useRef } from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
 
 import { loginWithGoogle , logoutUser } from "../firebase/authService"
 import { useAuth } from "../context/useAuth"
 
 export default function Navbar() {
     const { user } = useAuth()
-    const [menuOpen , setMenuOpen] = useState(false)
-    const [loginErrorOpen , setLoginErrorOpen] = useState(false)
+    const [menuOpen, setMenuOpen] = useState(false)
+    const [loginErrorOpen, setLoginErrorOpen] = useState(false)
+    const navRef = useRef(null)
+
+    useGSAP(() => {
+        gsap.fromTo(".nav-animate", 
+            { y: -10, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.5, stagger: 0.1, ease: "power2.out", overwrite: "auto" }
+        )
+    }, { scope: navRef })
 
     const links = [
-        { label : "Overview" , to : "/" } ,
-        { label : "Browse" , to : "/apps" } ,
-        { label : "Editor" , to : "/editor" }
+        { label: "Overview", to: "/" },
+        { label: "Browse", to: "/apps" },
+        { label: "Editor", to: "/editor" }
     ]
 
     return (
-        <nav className="relative z-20 border-b border-[var(--border)] bg-[rgba(249,251,252,0.84)] backdrop-blur-2xl">
+        <nav ref={navRef} className="relative z-20 border-b border-[var(--border)] bg-[rgba(249,251,252,0.84)] backdrop-blur-2xl">
             <div className="mx-auto flex min-h-[var(--nav-height)] w-full max-w-[96rem] items-center gap-3 px-4 sm:px-6 lg:px-10 xl:px-12">
-                <div className="flex min-w-0 items-center gap-3">
+                <div className="nav-animate flex min-w-0 items-center gap-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-[1.1rem] border border-[var(--border-strong)] bg-[var(--paper)] shadow-[0_14px_32px_rgba(20,25,34,0.08)] sm:h-14 sm:w-14">
                         <span className="text-[1.4rem] font-semibold text-[var(--text)]">
                             K
@@ -37,7 +47,7 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                <div className="hidden flex-1 items-center justify-center md:flex">
+                <div className="nav-animate hidden flex-1 items-center justify-center md:flex">
                     <div className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--paper)] p-1 shadow-[0_10px_24px_rgba(20,25,34,0.05)]">
                         {links.map((link) => (
                             <NavLink
@@ -57,7 +67,7 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                <div className="hidden items-center gap-3 md:flex">
+                <div className="nav-animate hidden items-center gap-3 md:flex">
                     <div className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent-dark)]">
                         Cmd K
                     </div>

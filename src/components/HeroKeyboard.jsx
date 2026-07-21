@@ -1,4 +1,6 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
+import gsap from "gsap"
+import { useGSAP } from "@gsap/react"
 import "../styles/keyboard.css"
 
 import {
@@ -17,6 +19,15 @@ export default function HeroKeyboard({
         x: 0,
         y: 0
     })
+    
+    const container = useRef(null)
+
+    useGSAP(() => {
+        gsap.fromTo(".keyboard-shell",
+            { opacity: 0, scale: 0.9, rotateX: 10, y: 20 },
+            { opacity: 1, scale: 1, rotateX: tilt.x, y: 0, duration: 0.8, ease: "back.out(1.2)", clearProps: "transform" }
+        )
+    }, { scope: container })
 
     function handleMouseMove(e) {
         const rect = e.currentTarget.getBoundingClientRect()
@@ -56,6 +67,7 @@ export default function HeroKeyboard({
 
     return (
         <div
+            ref={container}
             onMouseMove={handleMouseMove}
             onMouseLeave={resetTilt}
             className={`keyboard-viewport ${densityClass}`}
